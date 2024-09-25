@@ -5,19 +5,22 @@ import './index.css';
 import App from './App';
 import { AuthProvider } from './context/AuthProvider';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js'
+import 'bootstrap-icons//font/bootstrap-icons.min.css'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+<React.StrictMode>
     <BrowserRouter>   
     <AuthProvider>
      <App />
      </AuthProvider>
     </BrowserRouter>
+    </React.StrictMode>
 
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -10,20 +10,21 @@ const Asid = () => {
         <ul>
             <li id="1" className="mt-3 mb-3">
             <NavLink to="/home" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
-          <i className="fa fa-home me-2  " aria-hidden="true"></i><strong>Inicio</strong>
+           <i className="bi bi-list me-2" aria-hidden="true"></i><strong>Listado</strong>
             </NavLink>
             </li>
-            <li id="2" className="mb-3"  >
+         
+            <li id="2" className="mb-3">
+           
+            <NavLink to="/recoleccion" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+            <p><i className="bi bi-box-fill me-2 "></i>Crear Recoleccion</p>
+            </NavLink>
+   
+            </li>
+            <li id="3" className="mb-3"  >
             <NavLink to="/cliente" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
             <i className="bi bi-person-add me-2 " aria-hidden="true"></i>Clientes
             </NavLink>
-            </li>
-            <li id="3" className="mb-3">
-           
-            <NavLink to="/recoleccion" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-            <p><i className="bi bi-box-fill me-2 "></i>Recoleccion y Entrega</p>
-            </NavLink>
-   
             </li>
          </ul>
         </div>

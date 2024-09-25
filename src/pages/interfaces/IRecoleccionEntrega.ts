@@ -12,12 +12,13 @@ export interface IRecoleccionEntrega{
 
     telefonoRecibe: string;
 
-    montoCobrar: number;
-    costoEnvio:number;
+    montoCobrar: string;
+    costoEnvio:string;
     direccionEntrega: string;
     
 
     estado: ESTATUSRECOLECCION;
+    tipoPago:TIPOPAGO;
 
     clienteEnvia: number;
 
@@ -27,6 +28,28 @@ export interface IRecoleccionEntrega{
 
 
     municipioRecibe:number;
+    total:number;
+
+}
+export interface IRecoleccion{
+    clienteEnvia: ICliente;
+    id:number;
+    nombreRecibe:string;
+    apellidoRecibe: string;
+    telefonoRecibe: string;
+    montoCobrar: string;
+    costoEnvio:string;
+    direccionEntrega: string;
+    estado: ESTATUSRECOLECCION;
+    tipoPago:TIPOPAGO;
+    municipioRecibe:IMunicipio;
+    total:number;
+    fechaCreacion:Date;
+}
+export interface IActualizarEstadoRecoleccion{
+  
+    id:number;
+    estado: ESTATUSRECOLECCION;
 
 }
 export enum ESTATUSRECOLECCION {

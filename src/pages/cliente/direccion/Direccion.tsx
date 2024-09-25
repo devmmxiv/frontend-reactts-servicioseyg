@@ -43,21 +43,24 @@ const Direccion = ({ direccion, onchange, onselect, onNuevaDireccion, actualizar
       setShowAlert(true)
       return
     }else{
- 
-      const d=direcciones.filter(x=>x.tipoDireccion=direccion.tipoDireccion)
-      if(d.length>0){
+    
+      const d=direcciones.filter(x=>x.tipoDireccion==direccion.tipoDireccion)
+      console.log(d);
+      if(d.length>0 ){
+        if(d[0].id==0){
         setMensajeAlerta(`ya hay una direccion como  ${direccion.tipoDireccion}`)
         setShowAlert(true)
         return;
+        }
       }
     }
-    
+
     ManejadorDirecciones(direccion, 1)
   }
 
   return (
     <div>            
-      <Alert show={showAlert} toogle={toogleAlerta} mensaje={mensajeAlerta}></Alert>
+      <Alert show={showAlert} toogle={toogleAlerta} mensaje={mensajeAlerta} clase="alert alert-danger alert-dismissible fade show"></Alert>
 
       <form >
         <div className="input-group mb-3" >

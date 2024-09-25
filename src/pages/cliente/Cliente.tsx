@@ -1,10 +1,14 @@
-import { HtmlHTMLAttributes, useEffect, useState } from "react"
+import {  useEffect, useState } from "react"
 import ModalCliente from "./Modal_Cliente"
 import { IDireccion, ETipoDireccion } from "../interfaces/IDireccion"
 import { ICliente } from "../interfaces/ICliente"
 import { ETipoCuentaBancaria, ICuentaBancaria } from "../interfaces/ICuentaBancaria"
 
-import {api_createCliente,api_getClientes,api_updateCliente} from '../api/api_cliente/apiclientes'
+import { api_createCliente, api_getClientes, api_updateCliente } from '../api/api_cliente/apiclientes'
+import * as f from './functions'
+
+
+
 const initCliente: ICliente = {
   nombre: '',
   id: 0,
@@ -12,7 +16,7 @@ const initCliente: ICliente = {
   apellido: "",
   nombrePagina: "",
   telefono: "",
-  estado:true,
+  estado: true,
   direcciones: [
 
   ], cuentas: [
@@ -21,18 +25,21 @@ const initCliente: ICliente = {
 
 }
 
+
 const Cliente = () => {
+  const [status,setStatus]=useState(false)
   const [clientes, setClientes] = useState<ICliente[]>([])
   const [cliente, setCliente] = useState<ICliente>(initCliente)
   const [update, setUpdate] = useState(false)
- 
-//alerta
-const [show,setShow]=useState(false)
-const [mensaje,setMensaje]=useState('')
 
-const toogle=()=>{
-  setShow(!show)
-}
+  //alerta
+  const [show, setShow] = useState(false)
+  const [mensaje, setMensaje] = useState('')
+
+
+
+
+
 
   const onClickeAgregar = (c: ICliente, opcion: boolean) => {
 
@@ -42,19 +49,28 @@ const toogle=()=>{
       setCliente(initCliente)
     }
     setUpdate(opcion);
-
+   
   }
-  const  onSaveChanges =async () => {
+  const close=()=>{
+    console.log('se agrega un evento al boton cerrar')
+  }
 
-    if(!update){
+  const onSaveChanges = async () => {
+   
+    if (!update) {
 
-      const resp=await api_createCliente(cliente);
-
-    }else{
-      console.log('cliente a actualizar',cliente)
-      const resp=await api_updateCliente(cliente);
+      const resp = await api_createCliente(cliente);
+      f.alerta('Cliente Creado con Exito')
+      setCliente(initCliente)
+    } else {
+ 
+      const resp = await api_updateCliente(cliente);
+      f.alerta('Cliente Actualizado con Exito')
+      setCliente(initCliente)
     }
+
     listarClientes();
+
   }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -125,16 +141,16 @@ const toogle=()=>{
     //1 agregar o actualizar
     //2 eliminar
     if (accion === 1) {
-      if (direccion.id === 0) {//es cuenta nueva la agrego al arreglo de cuentas
-    
-    const d=cliente.direcciones.filter(x=>x.tipoDireccion=direccion.tipoDireccion)
-    if(d.length >0){
-      setMensaje(`Ya hay una direccion como ${direccion.tipoDireccion}`)
-      toogle()
-      return
-    }
+      if (direccion.id === 0) {// direccion nueva la agrego al arreglo de cuentas
+
+        //const d = cliente.direcciones.filter(x => x.tipoDireccion == direccion.tipoDireccion)
+        //if (d.length > 0) {
+        //  setMensaje(`Ya hay una direccion como ${direccion.tipoDireccion}`)
+        //  toogle()
+        //  return
+        //}
         const nDirecciones = [...cliente.direcciones, direccion]
-        
+
         setCliente({
           ...cliente,
           direcciones: nDirecciones
@@ -179,22 +195,28 @@ const toogle=()=>{
     return cuentas
   }
   /****************************************/
-  const listarClientes=async()=>{
-    const data=await api_getClientes();
+  const listarClientes = async () => {
+    const data = await api_getClientes();
 
     setClientes(data)
   }
-useEffect(()=>{
-  
+  useEffect(() => {
 
-  listarClientes()
-},[])
+
+    listarClientes()
+  }, [])
+
+  //test modaltest
+  const [showTest,setShowTest]=useState(false)
+  const toogleTest=()=>{
+    setShowTest(!showTest)
+  }
   return (
     <>
       <div className="container mt-4">
         <div className="row">
           <div className="col-lg-12">
-
+   
             <div className="card">
               <div className="card-header">
                 <p className="text-center h1 mt-2">Catalogo de Clientes</p>
@@ -202,6 +224,7 @@ useEffect(()=>{
                   <div className="col-md-4">
 
                     <button
+                     name="btnAgregar"
                       onClick={(e) => onClickeAgregar(initCliente, false)}
                       className="btn btn-success"
                       data-bs-toggle="modal" data-bs-target="#clienteModal"
@@ -318,13 +341,13 @@ useEffect(()=>{
       </div>
 
 
-      <ModalCliente cliente={cliente} update={update} onChange={onChange} 
+      <ModalCliente  
+
+      cliente={cliente} update={update} onChange={onChange}
         ManejadorCuenta={ManejadorCuentas}
         ManejadorDirecciones={ManejadorDirecciones}
         onSaveChanges={onSaveChanges}
-        show={show}
-        mensaje={mensaje}
-        toogle={toogle}
+
       ></ModalCliente>
     </>
 

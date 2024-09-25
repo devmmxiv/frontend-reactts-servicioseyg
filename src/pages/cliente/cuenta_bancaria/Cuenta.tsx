@@ -41,7 +41,7 @@ const Cuenta = ({ cuenta, onselect, onchange, onNuevaCuenta, esNuevaCuenta, Mane
   }
   return (
     <div>
-      <Alert show={showAlert} toogle={toogle} mensaje={mensajeAlerta}></Alert>
+      <Alert show={showAlert} toogle={toogle} mensaje={mensajeAlerta} clase="alert alert-danger alert-dismissible fade show"></Alert>
       <form >
 
         <div className="input-group mb-3" >

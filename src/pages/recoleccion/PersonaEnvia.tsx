@@ -10,15 +10,16 @@ const PersonaEnvia = ({cliente}:props) => {
   return (
     <div>
       <ul>
-        <li>Nombre   :{cliente.nombre}</li>
-        <li>Apellido :{cliente.apellido}</li>
-        <li>Telefono :{cliente.telefono}</li>
+      <li>Codigo Cliente   :<strong>{' '}{cliente.codigoCliente}</strong> </li>
+        <li>Nombre   :<strong>{' '+cliente.nombre+' '+cliente.apellido}</strong></li>
+    
+        <li>Telefono :<strong>{' '+cliente.telefono}</strong></li>
         
         <li>
-          Direccion: {cliente.direcciones[0].direccionCompleta}
+         Direccion:  <strong>{' '+cliente.direcciones[0].direccionCompleta}</strong>
         </li>
         <li>
-          Municipio: {cliente.direcciones[0].municipio.nombre}
+         Municipio:  <strong>{' '+cliente.direcciones[0].municipio.nombre}</strong>
         </li>
       </ul>
     </div>

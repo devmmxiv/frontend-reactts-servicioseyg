@@ -18,7 +18,8 @@ const SelectSearch = ({clientes,handleSelect}:props) => {
      <div className="select-box">
       <label>Cliente que Envia el Producto</label>
       <Select
-        options={clientes.map(c=>({label:c.codigoCliente+'-'+c.nombre+' '+ c.apellido+' - '+c.direcciones[0].direccionCompleta ,value:c.id}))}
+   
+        options={clientes.map(c=>({label:c.codigoCliente+'-'+c.nombre+' '+ c.apellido+' - '+c.direcciones[0].direccionCompleta +' - '+c.telefono ,value:c.id}))}
         onChange={(e)=>{handleSelect(e?.label,e?.value)}}
       />
 

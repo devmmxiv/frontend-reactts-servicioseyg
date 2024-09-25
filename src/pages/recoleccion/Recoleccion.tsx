@@ -7,6 +7,11 @@ import { ETipoDireccion } from '../interfaces/IDireccion'
 import { useAuth } from '../hooks/useAuth'
 import { ESTATUSRECOLECCION, IRecoleccionEntrega, TIPOPAGO } from '../interfaces/IRecoleccionEntrega'
 
+import {api_recoleccion} from '../api/api_recoleccion/api_recoleccionentrega'
+
+import * as v from './jsValidaciones'
+import Alert from '../shared/Alert'
+
 const init: ICliente = {
     id: 0,
     codigoCliente: '',
@@ -36,17 +41,21 @@ const recoleccionEntrega: IRecoleccionEntrega = {
 
     apellidoRecibe: '',
     telefonoRecibe: '',
-    montoCobrar: 0,
+    montoCobrar: '',
     direccionEntrega: '',
     estado: ESTATUSRECOLECCION.CREADA,
     clienteEnvia: 0,
     direccionClienteEnvia: 0,
     municipioRecibe: 0,
-    costoEnvio: 0
+    costoEnvio: '',
+    total: 0.00,
+    tipoPago: TIPOPAGO.EFECTIVO
 }
 const Recoleccion = () => {
+    const [show,setShow]=useState(false)
+    const [message,setMessage]=useState('')
+    const [clase,setClase]=useState('')
     const { municipios } = useAuth()
-
     const [clientes, setCliente] = useState<ICliente[]>([])
     const [envia, setEnvia] = useState<ICliente>(init)
     const [recolecion, setRecoleccion] = useState<IRecoleccionEntrega>(recoleccionEntrega)
@@ -54,42 +63,121 @@ const Recoleccion = () => {
     const handleSelect = (label?: string, value?: number) => {
 
         const c = clientes.filter(x => x.id == value)
+ 
         if (c.length === 0) {
+
             setEnvia(init)
         } else {
+
             setRecoleccion({
                 ...recolecion,
-                'clienteEnvia': c[0].id
-            });
-            setRecoleccion({
-                ...recolecion,
+                'clienteEnvia': c[0].id,
                 'direccionClienteEnvia': c[0].direcciones[0].id
             });
+            
             setEnvia(c[0]);
         }
 
 
     }
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setRecoleccion({
+                ...recolecion,
+                [e.target.name]: e.target.value,
+             
+            });
+  
+    }
+    
+    const onChangeTotal = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        let t=0;
+        if(e.target.name==='costoEnvio'){
+         
+            t= Number(e.target.value) + Number(recolecion.montoCobrar);
+            console.log('costo envio ='+e.target.value+ 'monto cobrar ='+recolecion.montoCobrar+ 'total =' +t)
+            setRecoleccion({
+                ...recolecion,
+                costoEnvio:e.target.value,
+                total:t
+            });
+
+
+
+        }else{
+            t= Number(e.target.value) +  Number(recolecion.costoEnvio)
+            setRecoleccion({
+                ...recolecion,
+                montoCobrar:e.target.value,
+             
+            });
+        }
+     
+
+
+        
+     
+    }
+
+     
+
+    
+    const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
         setRecoleccion({
             ...recolecion,
             [e.target.name]: e.target.value
         });
+    }
+    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+        
+        e.preventDefault()
+        const montoCobrar:number=Number(recolecion.montoCobrar)
+        const costoEnvio:number=Number(recoleccionEntrega.montoCobrar)
+        const total:number=Number(recolecion.total)
+        if(montoCobrar === Number.NaN || costoEnvio === Number.NaN || total === Number.NaN || montoCobrar< 0 || total<0 || costoEnvio<0)  {
+            MostrarMensaje('No se permiten valores negativos\n verificar montos','warning')
+            return;
+        }
+        if(recolecion.tipoPago===TIPOPAGO.YAPAGADO){
+  
+            if(montoCobrar === Number.NaN  || montoCobrar> 0 )  {
+                MostrarMensaje('Monto a cobrar tiene que estar en  0 porque ya esta pagado. Verificar montos','warning')
+                return;
+            }
+        }
+        console.log('recoleccion a grabar', recolecion)
+        if(recolecion.clienteEnvia===0){
+            console.log(recolecion.clienteEnvia)
+            MostrarMensaje('Debe de Seleccionar el Cliente que envia. Verificar','warning')
+            return;
+        }
+        grabarRecoleccion(recolecion)
+      // console.log('recoleccion a grabar', recolecion)
 
     }
-    const onSelect=(e:React.ChangeEvent<HTMLSelectElement>)=>{
-        console.log('name',e.target.name)
-        console.log('value',e.target.value)
-        setRecoleccion({
-            ...recolecion,
-            [e.target.name]: e.target.value
-        });
-       }
-    const handleSubmit = () => {
-        console.log('recoleccion a grabar',recolecion)
-    }
+ 
+    const grabarRecoleccion=async (recoleccion:IRecoleccionEntrega)=>{
+        const resultado=await api_recoleccion(recolecion);
+        if(resultado !== null){
 
+    
+            setRecoleccion({...recoleccionEntrega,clienteEnvia:envia.id})
+          
+    
+        }
+      
+    }
+    const toggle=()=>{
+        setShow(false)
+    }
+    const MostrarMensaje=(message:string,clase:string)=>{
+        setMessage(message)
+        setShow(true)
+        setClase(clase)
+        
+    }
     useEffect(() => {
 
         const listarCliente = async () => {
@@ -104,7 +192,7 @@ const Recoleccion = () => {
             <div className="container mt-2">
                 <div className="row">
                     <div className="col-md-12">
-
+                        <Alert show={show} mensaje={message} toogle={toggle} clase={clase}></Alert>
                         <div className="card">
                             <div className="card-header">
                                 <p className="text-center h1 mt-2">Recoleccion y Entrega de paquetes</p>
@@ -115,30 +203,34 @@ const Recoleccion = () => {
 
                             </div>
                             <div className="card-body">
-                                <h6 className="card-subtitle mb-2 text-body-secondary">Ingrese los Datos de la Persona que Recibe</h6>
-                                <form className='mt-3'>
+                                <h5 className="card-subtitle mb-2 text-body-secondary">Ingrese los Datos de la Persona que Recibe</h5>
+                                <form className='mt-3 needs-validation' onSubmit={(e)=>handleSubmit(e)}>
                                     <div className="input-group mb-3">
                                         <span className="input-group-text">Nombre</span>
-                                        <input type="text" className="form-control" 
-                                        value={recolecion.nombreRecibe} 
-                                        name='nombreRecibe'
-                                        onChange={(e)=>onChange(e)}
-                                        placeholder="Ingrese Nombre quien Recibe" aria-label="nombre" />
+                                        <input type="text" className="form-control"
+                                            value={recolecion.nombreRecibe}
+                                            name='nombreRecibe'
+
+                                            onChange={(e) => onChange(e)}
+                                            placeholder="Ingrese Nombre quien Recibe" aria-label="nombre" 
+                                            required/>
                                         <span className="input-group-text">Apellido</span>
-                                        <input type="text" className="form-control" placeholder="Ingrese Apellido quien recibe" aria-label="apellido" 
-                                           value={recolecion.apellidoRecibe} 
-                                           name='apellidoRecibe'
-                                           onChange={(e)=>onChange(e)}
+                                        <input type="text" className="form-control" placeholder="Ingrese Apellido quien recibe" aria-label="apellido"
+                                            value={recolecion.apellidoRecibe}
+                                            name='apellidoRecibe'
+                                            onChange={(e) => onChange(e)}
+                                            required
                                         />
 
                                     </div>
 
                                     <div className="input-group mb-3" >
                                         <span className="input-group-text">Telefonos</span>
-                                        <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 
-                                               value={recolecion.telefonoRecibe} 
-                                               name='telefonoRecibe'
-                                               onChange={(e)=>onChange(e)}
+                                        <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                            value={recolecion.telefonoRecibe}
+                                            name='telefonoRecibe'
+                                            onChange={(e) => onChange(e)}
+                                            required
                                         />
 
                                     </div>
@@ -147,19 +239,22 @@ const Recoleccion = () => {
                                         <span className="input-group-text">Direccion Completa
 
                                         </span>
-                                        <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                               value={recolecion.direccionEntrega} 
-                                               name='direccionEntrega'
-                                               onChange={(e)=>onChange(e)}
+                                        <input type="text" className="form-control"  aria-describedby="emailHelp"
+                                            value={recolecion.direccionEntrega}
+                                            name='direccionEntrega'
+                                            onChange={(e) => onChange(e)}
+                                            required
                                         />
 
                                     </div>
                                     <div className="input-group mb-3" >
                                         <span className="input-group-text">Municipio</span>
-                                        <select className="form-select" aria-label="Default select example" name='municipioRecibe'
-                                          onChange={(e) => onSelect(e)}
+                                        <select className="form-select" name='municipioRecibe'
+                                            onChange={(e) => onSelect(e)}
+                                            required
+                                            value={recolecion.municipioRecibe}
                                         >
-                                            <option value='0'>Seleccione un Municipio</option>
+                                            <option value='0' selected disabled>Seleccione un Municipio</option>
                                             {municipios.map((x, i) => (
                                                 <option value={x.id}>{x.nombre}</option>
                                             ))}
@@ -168,11 +263,12 @@ const Recoleccion = () => {
                                         </select>
 
                                     </div>
+
                                     <div className="input-group mb-3" >
                                         <span className="input-group-text">Forma de Pago</span>
-                                        <select className="form-select" aria-label="Default select example" name='formaPago'
-                                        onChange={(e) => onSelect(e)}
-                                        >
+                                        <select className="form-select" aria-label="Default select example" name='tipoPago'
+                                            onChange={(e) => onSelect(e)}
+                                      >
 
                                             <option value={TIPOPAGO.EFECTIVO}>Efectivo</option>
                                             <option value={TIPOPAGO.TARJETA}>Transferencia</option>
@@ -182,30 +278,35 @@ const Recoleccion = () => {
 
                                     </div>
                                     <div className="input-group mb-3" >
-                                        <span className="input-group-text">$ Monto a Cobrar</span>
-                                        <input type="number" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 
-                                                value={recolecion.montoCobrar} 
-                                                name='montoCobrar'
-                                                onChange={(e)=>onChange(e)}
+                                        <span className="input-group-text">Monto a Cobrar Q.</span>
+                                        <input type="number" className="form-control" aria-describedby="emailHelp"
+                                            value={recolecion.montoCobrar}
+                                            name='montoCobrar'
+                                            required
+                                            onChange={(e) => onChangeTotal(e)}
                                         />
 
                                     </div>
                                     <div className="input-group mb-3" >
-                                        <span className="input-group-text">$ Costo Envio</span>
-                                        <input type="number" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                                value={recolecion.costoEnvio} 
-                                                name='costoEnvio'
-                                                onChange={(e)=>onChange(e)}
+                                        <span className="input-group-text">Costo Envio Q.</span>
+                                        <input type="number" className="form-control"  aria-describedby="emailHelp"
+                                            value={recolecion.costoEnvio}
+                                            name='costoEnvio'
+                                             id='costoEnvio'
+                                            onChange={(e) => onChangeTotal(e)}
+                                            required
                                         />
 
                                     </div>
                                     <div className="input-group mb-3" >
-                                        <span className="input-group-text">$ Total a pagar</span>
-                                        <input type="number" className="form-control" readOnly aria-describedby="emailHelp" />
-
+                                        <span className="input-group-text"> Total a pagar</span>
+                                        <span className="input-group-text">Q.  {Number(recolecion.costoEnvio) + Number(recolecion.montoCobrar)}</span>
+                                      
+                                  
                                     </div>
 
-                                    <button type="button" className="btn btn-primary" onClick={handleSubmit}>Grabar</button>
+                                    <button type="submit"  className="btn btn-primary">Grabar</button>
+                              
                                 </form>
                             </div>
                         </div>
