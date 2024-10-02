@@ -61,9 +61,8 @@ const Recoleccion = () => {
     const [recolecion, setRecoleccion] = useState<IRecoleccionEntrega>(recoleccionEntrega)
 
     const handleSelect = (label?: string, value?: number) => {
-
         const c = clientes.filter(x => x.id == value)
- 
+        const d= clientes[0].direcciones.filter(d=>d.tipoDireccion===ETipoDireccion.PRINCIPAL)
         if (c.length === 0) {
 
             setEnvia(init)
@@ -72,13 +71,11 @@ const Recoleccion = () => {
             setRecoleccion({
                 ...recolecion,
                 'clienteEnvia': c[0].id,
-                'direccionClienteEnvia': c[0].direcciones[0].id
+                'direccionClienteEnvia': d[0].id
             });
             
             setEnvia(c[0]);
         }
-
-
     }
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +93,7 @@ const Recoleccion = () => {
         if(e.target.name==='costoEnvio'){
          
             t= Number(e.target.value) + Number(recolecion.montoCobrar);
-            console.log('costo envio ='+e.target.value+ 'monto cobrar ='+recolecion.montoCobrar+ 'total =' +t)
+           
             setRecoleccion({
                 ...recolecion,
                 costoEnvio:e.target.value,
@@ -110,7 +107,7 @@ const Recoleccion = () => {
             setRecoleccion({
                 ...recolecion,
                 montoCobrar:e.target.value,
-             
+                total:t
             });
         }
      
@@ -159,13 +156,20 @@ const Recoleccion = () => {
     }
  
     const grabarRecoleccion=async (recoleccion:IRecoleccionEntrega)=>{
-        const resultado=await api_recoleccion(recolecion);
-        if(resultado !== null){
 
+        const resultado=await api_recoleccion(recolecion);
+
+        if(resultado?.status ===201){
+
+            const d= envia.direcciones.filter(d=>d.tipoDireccion===ETipoDireccion.PRINCIPAL)
+ 
+            setRecoleccion({...recoleccionEntrega,clienteEnvia:envia.id,direccionClienteEnvia:d[0].id})
+            MostrarMensaje("Recoleccion creada con Exito","success")
     
-            setRecoleccion({...recoleccionEntrega,clienteEnvia:envia.id})
-          
-    
+        }else{
+
+        
+            MostrarMensaje("No se pudo crear la recoleccion revise datos"+resultado,"danger")
         }
       
     }
@@ -256,7 +260,7 @@ const Recoleccion = () => {
                                         >
                                             <option value='0' selected disabled>Seleccione un Municipio</option>
                                             {municipios.map((x, i) => (
-                                                <option value={x.id}>{x.nombre}</option>
+                                                <option value={x.id} key={x.id}>{x.nombre}</option>
                                             ))}
 
 
@@ -271,8 +275,8 @@ const Recoleccion = () => {
                                       >
 
                                             <option value={TIPOPAGO.EFECTIVO}>Efectivo</option>
-                                            <option value={TIPOPAGO.TARJETA}>Transferencia</option>
-                                            <option value={TIPOPAGO.TRANSFERENCIA}>Tarjeta Credito/Debito</option>
+                                            <option value={TIPOPAGO.TRANSFERENCIA}>Transferencia</option>
+                                            <option value={TIPOPAGO.TARJETA}>Tarjeta Credito/Debito</option>
                                             <option value={TIPOPAGO.YAPAGADO}>Ya Pagado</option>
                                         </select>
 

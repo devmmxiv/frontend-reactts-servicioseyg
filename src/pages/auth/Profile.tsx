@@ -46,15 +46,16 @@ const Profile = () => {
                                 <form className='mt-3'>
                                     <div className="input-group mb-3">
                                         <span className="input-group-text">Nombre y Apellido</span>
-                                        <input type="text" value={usuario.nombre} aria-label="First name" className="form-control" />
-                                        <input type="text" value={usuario.apellido} aria-label="Last name" className="form-control" />
+                                        <input type="text" value={usuario.nombre} aria-label="First name" readOnly className="form-control" />
+                                        <input type="text" value={usuario.apellido} aria-label="Last name" readOnly className="form-control" />
                                     </div>
 
                                     <div className="input-group mb-3" >
                                         <span className="input-group-text">Telefonos</span>
                                         <input type="text"
                                             value={user.telefono}
-                                            className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                                            className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                            readOnly />
 
                                     </div>
 
@@ -62,7 +63,8 @@ const Profile = () => {
                                     <div className="mb-3">
                                         <div className="input-group " >
                                             <span className="input-group-text">Direccion</span>
-                                            <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                                            <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                            readOnly />
 
                                         </div>
                                         <div className="form-text" id="basic-addon4">Esta direccion se usara para las recolecciones de sus entregas.</div>
@@ -70,7 +72,8 @@ const Profile = () => {
                                     <div className="input-group mb-3" >
 
                                         <span className="input-group-text">Colonia</span>
-                                        <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                                        <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 
+                                        readOnly/>
                                     </div>
                                     <Departamento id={usuario.municipio.id} onselect={onselect}></Departamento>
 

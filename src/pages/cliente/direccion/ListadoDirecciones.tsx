@@ -43,7 +43,6 @@ const ListadoDirecciones = ({ direcciones,onUpdateDireccion ,ManejadorDireccione
                             <td>{m.tipoDireccion}</td>
                             <td>{m.direccionCompleta}</td>
                             <td>{m.zona}</td>
-                          
                             <td>{m.municipio.nombre}
                             </td>
                             <td>
@@ -55,28 +54,20 @@ const ListadoDirecciones = ({ direcciones,onUpdateDireccion ,ManejadorDireccione
                           >
                           <i className="bi bi-pencil-square"></i>
                           </button>
-                
                           <button className="btn btn-danger"   
-                                      onClick={()=>onClickEliminar(m)}
+                            onClick={()=>onClickEliminar(m)}
                           >
                           <i className="bi bi-trash3"></i>
-                          
-                          </button>
+                         </button>
                             </td>
                           </tr>)
                         })}
 
                       </>
                     ) : ''
-
-
-
                     }
-
-                 
                   </tbody>
                 </table>
-         
 
     </>
   )

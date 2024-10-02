@@ -28,7 +28,7 @@ const Bancos = ({id,onselect}:props) => {
         <option value='0' selected>Seleccione un Banco</option>
         {bancos.map((m) => {
 
-          return <option value={m.id}>{m.nombre}</option>
+          return <option value={m.id} key={m.id}>{m.nombre}</option>
         })}
 
 

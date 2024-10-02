@@ -49,7 +49,7 @@ const ModalCliente: FC<props> = ({ cliente, update, onChange, ManejadorDireccion
                 {/* Modal */}
                 
                 <div className= "modal fade"  id="clienteModal"  tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true" >
-                    <div className="modal-dialog modal-lg">
+                    <div className="modal-dialog modal-xl">
                   
                         <div className="modal-content">
                     

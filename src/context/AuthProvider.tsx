@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }: props) => {
     const listaMunicipios = async () => {
     
         const d = await getMunicipios();
-        console.log('lista municipios',d)
         setMunicipios(d)
 
     }
