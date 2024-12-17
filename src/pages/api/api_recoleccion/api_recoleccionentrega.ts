@@ -5,21 +5,20 @@ import Recoleccion from "../../recoleccion/Recoleccion";
 const API =process.env.REACT_APP_API;
 export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
     try{
-    
+        
         const resp = await fetch(`${API}/recoleccion-entrega`, {
         method: "POST",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        
-        },
+       
         body: JSON.stringify(  
         recoleccion
         ),
       });
+
       const data = await resp.json().catch((error) => {
         console.log("error en fetch data", error);
       });
+     
       return resp;
     
     }catch(error){
@@ -32,12 +31,10 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
         const resp = await fetch(`${API}/recoleccion-entrega`, {
         method: "GET",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        
-        },
+     
        
       });
+  
       const data = await resp.json().catch((error) => {
         console.log("error en fetch data", error);
       });
@@ -50,18 +47,16 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
 
   export const api_updateRecoleccionEstado = async (id: number, recoleccion: IActualizarEstadoRecoleccion) => {
     try{
- 
+      console.log(recoleccion);
         const resp = await fetch(`${API}/recoleccion-entrega/update/estado/${recoleccion.id}`, {
         method: "PATCH",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        
-        },
+       
         body: JSON.stringify(  
         recoleccion
         ),
       });
+      
       const data = await resp.json().catch((error) => {
         console.log("error en fetch data", error);
       });
@@ -85,6 +80,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
         recoleccion
         )
       });
+
       if(resp.ok){
         const data = await resp.json().catch((error) => {
           console.log("error en fetch data", error);
@@ -125,10 +121,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
         const resp = await fetch(`${API}/recoleccion-entrega/datoscierre`, {
         method: "GET",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        
-        },
+       
       
       });
       const data = await resp.json().catch((error) => {
@@ -146,10 +139,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
         const resp = await fetch(`${API}/recoleccion-entrega/recoleccionesestado`, {
         method: "GET",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        
-        },
+      
       
       });
       const data = await resp.json().catch((error) => {
@@ -188,10 +178,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
         const resp = await fetch(`${API}/recoleccion-entrega/listadorecoleccionescierre`, {
         method: "GET",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        
-        },
+       
       
       });
       const data = await resp.json().catch((error) => {
@@ -202,4 +189,25 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
     }catch(error){
         console.log("Erron en fetch",error)
     }
+  }
+  export const  api_getClienteByCierre=async (idCierre:number)=>{
+    try{
+     
+      const resp = await fetch(`${API}/recoleccion-entrega/clientesbycierre/${idCierre}`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      
+      },
+    
+    });
+    const data = await resp.json().catch((error) => {
+      console.log("error en fetch data", error);
+    });
+    return data;
+  
+  }catch(error){
+      console.log("Erron en fetch",error)
+  }
   }

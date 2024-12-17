@@ -1,15 +1,15 @@
 const API =process.env.REACT_APP_API;
-export const getMunicipios = async () => {
+export const api_getEmpleados = async () => {
     try {
-        const URL=`${API}/municipio`
-        const resp = await fetch(URL);
-       
+     
+        const resp = await fetch(`${API}/empleado`);
+     
         if (resp.ok) {
-            
+     
             const data = await resp.json().catch((error) => {
-                console.log("error en fetch data municipios", error);
+                console.log("error en fetch data", error);
             });
-  
+            //console.log(data)
             return data;
         } else {
             return resp;
@@ -18,6 +18,5 @@ export const getMunicipios = async () => {
 
     } catch (error) {
         console.log("Erron en fetch", error)
-        
     }
 };

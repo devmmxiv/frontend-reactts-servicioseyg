@@ -40,7 +40,7 @@ const onClick=()=>{
                                         <th scope="col">Forma de Pago</th>
                                         <th scope="col">$ Monto Cobrar</th>
 
-                                        <th scope="col">Fecha Envio</th>
+                                        <th scope="col">Fecha Entrega</th>
                                         <th scope="col">Estado</th>
                                         <th scope="col">Cierre</th>
                                     </tr>
@@ -57,11 +57,11 @@ const onClick=()=>{
                                                 <td>{m.municipioRecibe.nombre}</td>
                                                 <div className="vr"></div>
                                                 <td>{m.tipoPago}</td>
-                                                <td>{f.currencyFormatter(m.montoCobrar)}
+                                                <td>{f.currencyFormatter(m.totalCobrar.toString())}
 
                                                 </td>
 
-                                                <td>{f.dateFormatter(m.fechaCreacion)}
+                                                <td>{f.dateFormatter(m.fechaEntrega!)}
 
                                                 </td>
 

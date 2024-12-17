@@ -1,19 +1,21 @@
 import { useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
-import { IRecoleccion, TIPOPAGO } from "../../interfaces/IRecoleccionEntrega"
+import { ESTATUSRECOLECCION, IRecoleccion, TIPOPAGO } from "../../interfaces/IRecoleccionEntrega"
 import ConfirmDialog from "../../shared/confirmDialog/ConfirmDialog"
+import { IEmpleado } from "../../interfaces/IEmpleado";
 
 interface props {
-    recoleccion: IRecoleccion
-    updateRecoleccion: () => void
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    onChangeTotal: (e: React.ChangeEvent<HTMLInputElement>) => void
-    onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
-
-
+    recoleccion: IRecoleccion;
+    disableInputoCostoPRoducto:boolean;
+    updateRecoleccion: () => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChangeTotal: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    onChangePagaEnvio:(e:boolean)=>void;
+    empleados:IEmpleado[]
 }
 
-const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect,onChangeTotal }: props) => {
+const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect,onChangeTotal ,onChangePagaEnvio,disableInputoCostoPRoducto,empleados}: props) => {
 
 
     const { municipios } = useAuth()
@@ -68,6 +70,15 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
                                     onChange={(e) => onChange(e)}
                                 />
                             </div>
+                            <div className="input-group mb-3">
+                                <span className="input-group-text"><i className="bi bi-signpost p-1"></i>Zona</span>
+                                <input type="number" id="zona" aria-label="address"
+                                    value={recoleccion.zona}
+                                    name='zona'
+                                    className="form-control"
+                                    onChange={(e) => onChange(e)}
+                                />
+                            </div>
                             <div className="input-group mb-3" >
                                 <span className="input-group-text"><i className="bi bi-building p-1"></i>
                                     Municipio</span>
@@ -101,23 +112,66 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
 
                             </div>
                             <div className="input-group mb-3" >
-                                <span className="input-group-text"><i className="bi bi-currency-dollar p-1"></i>Monto a Cobrar Q.</span>
+                                <span className="input-group-text"><i className="bi bi-currency-dollar p-1"></i>Total a Cobrar Q.</span>
                                 <input type="number" className="form-control" aria-describedby="emailHelp"
-                                    value={recoleccion.montoCobrar}
-                                    name='montoCobrar'
-                                    required
-                                    onChange={(e) => onChangeTotal(e)}
+                                    value={recoleccion.totalCobrar}
+                                    name='totalCobrar'
+                                    
+                                    disabled={disableInputoCostoPRoducto}
+                                   onChange={(e) => onChangeTotal(e)}
+                                  //  onChange={(e) => onChange(e)}
                                 />
                             </div>
                             <div className="input-group mb-3" >
-                                <span className="input-group-text"><i className="bi bi-currency-dollar p-1"></i>Costo Envio Q.</span>
+                                <span className="input-group-text"><i className="bi bi-currency-dollar p-1"></i>Precio Envio Q.</span>
                                 <input type="number" className="form-control" aria-describedby="emailHelp"
-                                    value={recoleccion.costoEnvio}
-                                    name='costoEnvio'
-                                    required
-                                    onChange={(e) => onChangeTotal(e)}
+                                    value={recoleccion.precioEnvio}
+                                    name='precioEnvio'
+                                    
+                                  
+                                  // onChange={(e) => onChangeTotal(e)}
+                                   onChange={(e) => onChange(e)}
                                 />
                             </div>
+                            <div className="input-group mb-3">
+
+                            <span className="input-group-text bi"><i className="bi bi-person-add p-1"></i>Empleado Asignado</span>
+
+
+                                        <select className="form-select" aria-label="Default select example" name='empleadoAsignado'
+                                           onChange={(e) => onSelect(e)}
+                                            value={recoleccion.empleadoAsignado.id}
+                                        >
+                                                {empleados.map((e)=>{return(
+                                                    <option value={e.id}>{e.nombre + ' '+e.apellido}</option>
+                                                )})}
+                                            
+                                    
+                                        </select>
+
+                                    </div>
+                                    <div className="input-group mb-3">
+
+                            <span className="input-group-text bi"><i className="bi bi-person-add p-1"></i>Estado</span>
+
+
+                                        <select className="form-select" aria-label="Default select example" name='estado'
+                                           onChange={(e) => onSelect(e)}
+                                            value={recoleccion.estado}
+                                        >
+                                                 
+                                                    <option value={ESTATUSRECOLECCION.CREADA}>{ESTATUSRECOLECCION.CREADA}</option>
+                                                    <option value={ESTATUSRECOLECCION.RECOLECTADA}>{ESTATUSRECOLECCION.RECOLECTADA}</option>
+                                                    <option value={ESTATUSRECOLECCION.ENRUTA}>{ESTATUSRECOLECCION.ENRUTA}</option>
+                                                    <option value={ESTATUSRECOLECCION.ENTREGADA}>{ESTATUSRECOLECCION.ENTREGADA}</option>
+                                                    <option value={ESTATUSRECOLECCION.NORECIBIDA}>{ESTATUSRECOLECCION.NORECIBIDA}</option>
+                                    
+                                        </select>
+
+                                    </div>
+          
+                           
+                       
                         </div>
                         <div className="modal-footer">
                             <button type="button" id='btnCerrarModalCliente' className="btn btn-secondary"

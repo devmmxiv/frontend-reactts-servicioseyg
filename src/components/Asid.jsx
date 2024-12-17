@@ -26,6 +26,12 @@ const Asid = () => {
             <i className="bi bi-person-add me-2 " aria-hidden="true"></i>Clientes
             </NavLink>
             </li>
+            <li id="5" className="mb-3"  >
+            <NavLink to="/empleado" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
+            <i className="bi bi-person-add me-2 " aria-hidden="true"></i>Empleados
+            </NavLink>
+            </li>
+            
             <li id="4" className="mb-3"  >
             <NavLink to="/proceso" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
             <i className="bi bi-gear me-2" aria-hidden="true"></i>Procesos
@@ -36,6 +42,7 @@ const Asid = () => {
             <i className="bi bi-clipboard-data me-2" aria-hidden="true"></i>Reportes
             </NavLink>
             </li>
+           
          </ul>
         </div>
       </div>

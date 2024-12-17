@@ -21,7 +21,7 @@ const MisRutas = () => {
           />
         }
       >
-
+        
         <Route path="/home" exact={true} Component={Home}></Route>
         <Route path="/cliente" exact={true} Component={Cliente}></Route>
         <Route path="/recoleccion" exact={true} Component={Recoleccion}></Route>

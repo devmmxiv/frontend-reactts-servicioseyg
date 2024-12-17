@@ -3,37 +3,36 @@ import { ESTATUSRECOLECCION, IRecoleccion, IRecoleccionResumenCierre } from '../
 import ConfirmDialog from '../../shared/confirmDialog/ConfirmDialog'
 
 import { api_createCierre } from '../../api/api_cierre/api_cierre'
-import { api_getRecoleccioneToCierre} from '../../api/api_recoleccion/api_recoleccionentrega'
+import { api_getRecoleccioneToCierre } from '../../api/api_recoleccion/api_recoleccionentrega'
 import Alert from '../../shared/Alert'
 import DetalleRecoleccionCierre from './DetalleRecoleccionCierre'
 import { ICierre } from '../../interfaces/ICierre'
 interface props {
-    onRefresh:()=>void
+    onRefresh: () => void
     resumen: IRecoleccionResumenCierre[]
     recolecciones: IRecoleccion[]
-    handlerCierre:()=>void
-    onChangeCerrada:(id:number,isCerrada:boolean)=>void
+    handlerCierre: () => void
+    onChangeCerrada: (id: number, isCerrada: boolean) => void
 }
-const ResumenCierre = ({ resumen, onRefresh,onChangeCerrada,recolecciones,handlerCierre
+const ResumenCierre = ({ resumen, onRefresh, onChangeCerrada, recolecciones, handlerCierre
 
-}: props) =>
-{
+}: props) => {
 
     const [show, setShow] = useState(false);
     const [mensaje, setMensaje] = useState('')
     const [clase, setClase] = useState('')
 
-    const onclick=()=>{
-        
+    const onclick = () => {
+
     }
 
-   
-     
-      const mostrarAlert = (mensaje: string, clase: string) => {
+
+
+    const mostrarAlert = (mensaje: string, clase: string) => {
         setShow(true)
         setMensaje(mensaje)
         setClase(clase)
-      }
+    }
 
     const dateFormatter = () => {
         const date = new Date();
@@ -43,16 +42,16 @@ const ResumenCierre = ({ resumen, onRefresh,onChangeCerrada,recolecciones,handle
         return formattedDateTime;
 
     }
- 
-      
+
+
     const toggle = () => {
         setShow(false)
-      }
-  
+    }
+
     return (
         <>
             <div className="card m-1" style={{ width: '25rem' }}>
-            <Alert show={show} mensaje={mensaje} clase={clase} toogle={toggle}></Alert>
+                <Alert show={show} mensaje={mensaje} clase={clase} toogle={toggle}></Alert>
                 <div className="card-body p-0">
                     <div className="pane py-2 px-3 border-bottom">
                         <div>
@@ -64,7 +63,7 @@ const ResumenCierre = ({ resumen, onRefresh,onChangeCerrada,recolecciones,handle
                     </div>
                     <div className="pane py-2 px-3 border-bottom">
 
-                        {resumen.length > 0 ? (
+                        {resumen && resumen.length > 0 ? (
                             <div>
                                 <table className="table">
                                     <thead>
@@ -89,13 +88,13 @@ const ResumenCierre = ({ resumen, onRefresh,onChangeCerrada,recolecciones,handle
                                     <tfoot>
                                         <tr>
                                             <td>  <button className="btn btn-flat btn-sm btn-outline-danger ms-auto m-1"
-                                            data-bs-toggle="modal" data-bs-target="#modalDetalleCierre"
-                                            onClick={onclick}
+                                                data-bs-toggle="modal" data-bs-target="#modalDetalleCierre"
+                                                onClick={onclick}
                                             >
                                                 Ver Detalle
                                             </button></td>
                                             <td></td>
-                                            
+
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -116,10 +115,10 @@ const ResumenCierre = ({ resumen, onRefresh,onChangeCerrada,recolecciones,handle
                     </div>
                 </div>
             </div>
-          
-            <DetalleRecoleccionCierre recolecciones={recolecciones} 
-            onChangeCerrada={onChangeCerrada} handlerConfirmacion={handlerCierre} 
-           />
+
+            <DetalleRecoleccionCierre recolecciones={recolecciones}
+                onChangeCerrada={onChangeCerrada} handlerConfirmacion={handlerCierre}
+            />
         </>
     )
 }

@@ -1,8 +1,8 @@
 const API =process.env.REACT_APP_API;
-export const get_reporte = async (idCierre:number) => {
+export const get_reporte = async (idCierre:number,idCliente:number) => {
     try{
     
-        const resp = await fetch(`${API}/reports/cierre/${idCierre}`, {
+        const resp = await fetch(`${API}/reports/cierre/${idCierre}/${idCliente}`, {
         method: "GET",
         mode: "cors",
         headers: {

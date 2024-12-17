@@ -3,18 +3,21 @@ import { ICliente } from "../../interfaces/ICliente";
 const API =process.env.REACT_APP_API;
 export const api_createCliente = async (client:ICliente) => {
     try{
-     
+        console.log(JSON.stringify(  
+            client
+            ));
         const resp = await fetch(`${API}/cliente`, {
         method: "POST",
         mode: "cors",
         headers: {
-          "Content-Type": "application/json",
-        
-        },
+            "Content-Type": "application/json",
+          
+          },
         body: JSON.stringify(  
         client
         ),
       });
+      console.log(resp);
       const data = await resp.json().catch((error) => {
         console.log("error en fetch data", error);
       });
@@ -26,18 +29,19 @@ export const api_createCliente = async (client:ICliente) => {
   };
   export const api_updateCliente = async (client:ICliente) => {
     try{
-     
+       
         const resp = await fetch(`${API}/cliente`, {
         method: "PUT",
         mode: "cors",
         headers: {
-          "Content-Type": "application/json",
-        
-        },
+            "Content-Type": "application/json",
+          
+          },
         body: JSON.stringify(  
         client
         ),
       });
+     
       const data = await resp.json().catch((error) => {
         console.log("error en fetch data", error);
       });

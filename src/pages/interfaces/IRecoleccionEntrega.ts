@@ -1,34 +1,31 @@
 import { ICliente } from "./ICliente";
 import { IDireccion } from "./IDireccion";
+import { IEmpleado } from "./IEmpleado";
 import { IMunicipio } from "./iMunicipio";
 
 export interface IRecoleccionEntrega {
     id?: number;
-
     nombreRecibe: string;
-
-
     apellidoRecibe: string;
-
     telefonoRecibe: string;
 
-    montoCobrar: string;
-    costoEnvio: string;
+   // precioProducto: string;
+    precioEnvio: string;
     direccionEntrega: string;
-
+    zonaEntrega:number,
 
     estado: ESTATUSRECOLECCION;
     tipoPago: TIPOPAGO;
 
     clienteEnvia: number;
 
-
-    direccionClienteEnvia: number;
-
-
-
+    direccionEnvia:IDireccion;
+    municipioEnvia:IMunicipio;
+    clienteRecibePagaEnvio?:boolean;
     municipioRecibe: number;
-    total: number;
+    totalCobrar: string;
+   
+    empleadoAsignado:IEmpleado
 
 }
 export interface IRecoleccion {
@@ -37,16 +34,22 @@ export interface IRecoleccion {
     nombreRecibe: string;
     apellidoRecibe: string;
     telefonoRecibe: string;
-    montoCobrar: string;
-    costoEnvio: string;
+   // precioProducto: string;
+   precioEnvio: string;
     direccionEntrega: string;
+    zona:number,
     estado: ESTATUSRECOLECCION;
     tipoPago: TIPOPAGO;
     municipioRecibe: IMunicipio;
-    total: number;
+    totalCobrar: string;
     fechaCreacion: Date;
     isCerrada:boolean;
-
+   // clienteRecibePagaEnvio?:boolean;
+   empleadoRecolecta?:IEmpleado;
+   empleadoEntrega?:IEmpleado;
+   empleadoAsignado:IEmpleado;
+    fechaRecoleccion?:Date;
+    fechaEntrega?:Date;
 }
 export interface IRecoleccionResumenCierre {
 

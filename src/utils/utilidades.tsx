@@ -16,3 +16,12 @@ export const currencyFormatter = (value: string) => {
     return formattedDateTime;
 
   }
+  export const dateToString = (fecha: Date) => {
+
+    const isoString = fecha.toISOString();
+    // Split at the "T" character to get the date part
+    const formattedDate = isoString.split("T")[0];
+    return formattedDate;
+
+
+  }

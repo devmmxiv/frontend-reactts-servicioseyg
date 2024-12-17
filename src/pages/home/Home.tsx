@@ -6,7 +6,17 @@ import ConfirmDialog from '../shared/confirmDialog/ConfirmDialog'
 import * as f from './util.js'
 import DetalleRecoleccion from './componentes/DetalleRecoleccion'
 import { IMunicipio } from '../interfaces/iMunicipio'
+import { IEmpleado } from '../interfaces/IEmpleado'
+import { api_getEmpleados } from '../api/api_empleado/apiempleado'
 
+const initEmpleado: IEmpleado = {
+  id: 0,
+  codigoEmpleado: '',
+  nombre: '',
+  apellido: '',
+  telefono: '',
+  estado: false
+}
 const init: IRecoleccion = {
 
   clienteEnvia: {
@@ -24,25 +34,33 @@ const init: IRecoleccion = {
   nombreRecibe: "",
   apellidoRecibe: "",
   telefonoRecibe: "",
-  montoCobrar: "",
-  costoEnvio: "",
+  //precioProducto: "",
+  //costoEnvio: "",
   direccionEntrega: "",
+  zona: 1,
   estado: ESTATUSRECOLECCION.CREADA,
   tipoPago: TIPOPAGO.EFECTIVO,
   municipioRecibe: {
     id: 0
   },
-  total: 0,
+  totalCobrar: '0',
+  precioEnvio: '25.00',
   fechaCreacion: new Date(),
-  isCerrada: false
+  isCerrada: false,
+  empleadoAsignado: initEmpleado,
+  empleadoEntrega: initEmpleado,
+  empleadoRecolecta: initEmpleado
 }
 const Home = () => {
   const [id, setId] = useState(0);
-  const [mensajeConfirmacion,setMensajeConfirmacion]=useState('')
-  const [idModal,setIdModal]=useState('')
+  const [mensajeConfirmacion, setMensajeConfirmacion] = useState('')
+  const [idModal, setIdModal] = useState('')
   const [estado, setEstado] = useState<ESTATUSRECOLECCION>(ESTATUSRECOLECCION.CREADA)
   const [recolecciones, setRecolecciones] = useState<IRecoleccion[]>([])
   const [recoleccion, setRecoleccion] = useState<IRecoleccion>(init)
+  const [disableInputoCostoPRoducto, setdisableCostoPRoducto] = useState(false);
+  const [empleados, setEmpleados] = useState<IEmpleado[]>([initEmpleado]);
+
   const obtenerRecolecciones = async () => {
     const resultado = await api_getRecoleccion()
     if (resultado !== null) {
@@ -133,6 +151,23 @@ const Home = () => {
 
 
   }
+  const onChangePagaEnvio = (paga: boolean) => {
+    /*  let t = 0
+      if (paga) {
+          t = Number(recoleccion.precioProducto) + Number(recoleccion.costoEnvio)
+      } else {
+          t = Number(recoleccion.precioProducto)
+      }
+  
+      setRecoleccion({
+          ...recoleccion,
+       //   clienteRecibePagaEnvio: paga,
+          totalCobrar: t
+  
+      });
+  */
+
+  }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
     setRecoleccion({
@@ -144,34 +179,36 @@ const Home = () => {
   }
   const onChangeTotal = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    let t=0;
-    if(e.target.name==='costoEnvio'){
-     
-        t= Number(e.target.value) + Number(recoleccion.montoCobrar);
-       
-        setRecoleccion({
+    setRecoleccion({
+      ...recoleccion,
+      totalCobrar: e.target.value
+    });
+    /*
+        let t = 0;
+        if (e.target.name === 'costoEnvio') {
+    
+          t =Number(recoleccion.precioProducto);
+    
+          setRecoleccion({
             ...recoleccion,
-            costoEnvio:e.target.value,
-            total:t
-        });
-
-
-
-    }else{
-        t= Number(e.target.value) +  Number(recoleccion.costoEnvio)
-        setRecoleccion({
+            costoEnvio: e.target.value,
+            totalCobrar: t
+          });
+    
+    
+    
+        } else {
+          t = Number(e.target.value)
+          setRecoleccion({
             ...recoleccion,
-            montoCobrar:e.target.value,
-            total:t
-        });
-    }
-
-}
+            precioProducto: e.target.value,
+            totalCobrar: t
+          });
+        }
+    */
+  }
   const updateRecoleccion = () => {
     if (recoleccion.id > 0) {
-      const total:number=Number(recoleccion.costoEnvio)+Number(recoleccion.montoCobrar);
-      setRecoleccion({...recoleccion,total:total})
-
       const r = recolecciones.map((d) => {
         if (d.id === recoleccion.id) {
           return {
@@ -181,49 +218,115 @@ const Home = () => {
             direccionEntrega: recoleccion.direccionEntrega,
             municipioRecibe: recoleccion.municipioRecibe,
             tipoPago: recoleccion.tipoPago,
-            total:total,
-            montoCobrar:recoleccion.montoCobrar,
-            costoEnvio:recoleccion.costoEnvio
+            // precioProducto: recoleccion.precioProducto,
+            totalCobrar: recoleccion.totalCobrar,
+            precioEnvio: recoleccion.precioEnvio,
+            // costoEnvio: recoleccion.costoEnvio
+            zona: recoleccion.zona,
+            estado: recoleccion.estado,
+            empleadoAsignado: recoleccion.empleadoAsignado
           }
 
         }
 
         return d;
       });
-      
+
+
       setRecolecciones(r)
-      actualizarRecoleccion(recoleccion.id,recoleccion);
+      actualizarRecoleccion(recoleccion.id, recoleccion);
     }
 
   }
-  
+
   const actualizarRecoleccion = async (id: number, recoleccion: IRecoleccion) => {
     try {
+      console.log(`estado ${recoleccion.estado}`)
       const respuesta = await api_updateRecoleccion(id, recoleccion);
-      console.log('respuesta',respuesta)
+
 
     } catch (error) {
       f.mensaje("No se pudo actualizar el estado de la recoleccion " + error)
     }
 
   }
-  const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
+  const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
     if (e.target.name === 'municipioRecibe') {
       const m: IMunicipio = { id: Number(e.target.value), nombre: e.target[e.target.selectedIndex].textContent?.toString() }
       setRecoleccion({ ...recoleccion, municipioRecibe: m })
-    } else {
-
-      setRecoleccion({
-        ...recoleccion,
-        [e.target.name]: e.target.value
+    } else if ((e.target.name === 'empleadoAsignado')) {
+      const id = Number(e.target.value);
+      const em = empleados.find((x) => {
+        if (x.id == id) {
+          return x;
+        }
       });
+
+      setRecoleccion({ ...recoleccion, empleadoAsignado: { id: em?.id, nombre: em?.nombre, apellido: em?.apellido } })
+    } else if ((e.target.name === 'estado')) {
+
+      switch (e.target.value) {
+        case ESTATUSRECOLECCION.CREADA: {
+          setRecoleccion({ ...recoleccion, estado: ESTATUSRECOLECCION.CREADA })
+          break;
+        }
+        case ESTATUSRECOLECCION.ENRUTA: {
+
+          setRecoleccion({ ...recoleccion, estado: ESTATUSRECOLECCION.ENRUTA })
+          break;
+        }
+        case ESTATUSRECOLECCION.ENTREGADA: {
+          setRecoleccion({ ...recoleccion, estado: ESTATUSRECOLECCION.ENTREGADA })
+          break;
+        }
+        case ESTATUSRECOLECCION.RECOLECTADA: {
+          setRecoleccion({ ...recoleccion, estado: ESTATUSRECOLECCION.RECOLECTADA })
+          break;
+        }
+        case ESTATUSRECOLECCION.NORECIBIDA: {
+          setRecoleccion({ ...recoleccion, estado: ESTATUSRECOLECCION.NORECIBIDA })
+          break;
+        }
+
+
+      }
+
+
+    }
+    else {
+
+      if (e.target.value === TIPOPAGO.YAPAGADO) {
+
+        setdisableCostoPRoducto(true);
+        setRecoleccion({
+          ...recoleccion,
+          [e.target.name]: e.target.value,
+          totalCobrar: '0.00'
+        });
+      }
+      else {
+        setdisableCostoPRoducto(false);
+        setRecoleccion({
+          ...recoleccion,
+          [e.target.name]: e.target.value,
+
+        });
+      }
+
+
+
     }
   }
 
   useEffect(() => {
     obtenerRecolecciones();
+    const listarEmpleados = async () => {
+      const data = await api_getEmpleados();
+      setEmpleados(data);
+    }
+    listarEmpleados();
 
   }, [])
   return (
@@ -245,14 +348,18 @@ const Home = () => {
               <div className="vr"></div>
               <th scope="col">Forma de Pago</th>
               <th scope="col">$ Monto Cobrar</th>
+              <th scope="col">$ Precio Envio</th>
               <div className="vr"></div>
-              <th scope="col">$ Costo Envio</th>
-              <th scope="col">Fecha Envio</th>
+
+              <th scope="col">Fecha </th>
               <th scope="col">Estado</th>
+              <th scope="col">Mensajero</th>
               <th scope="col">Operacion</th>
             </tr>
           </thead>
           <tbody>
+            {recolecciones && recolecciones.length > 0}
+            
             {recolecciones.map((m, i) => {
               return (
                 <tr key={m.id}>
@@ -264,72 +371,17 @@ const Home = () => {
                   <td>{m.municipioRecibe.nombre}</td>
                   <td className="vr"></td>
                   <td>{m.tipoPago}</td>
-                  <td>{currencyFormatter(m.montoCobrar)}
-
+                  <td>{currencyFormatter(m.totalCobrar.toString())} </td>
+                  <td>{currencyFormatter(m.precioEnvio.toString())}
                   </td>
                   <td className="vr"></td>
-                  <td>{currencyFormatter(m.costoEnvio)}
 
-                  </td>
                   <td>{dateFormatter(m.fechaCreacion)}
 
                   </td>
-                  <td>
-                    <div>
-                      <div className="form-check">
 
-                        <input className="form-check-input" type="radio" name={`${m.id}`} id={`${m.id}-1`}
-
-                          defaultChecked={m.estado === ESTATUSRECOLECCION.CREADA ? true : false}
-                          onChange={(e) => onChangeStatus(m.id, ESTATUSRECOLECCION.CREADA)}
-                        />
-                        <label className="form-check-label" htmlFor="flexRadioDefault1">
-                          {ESTATUSRECOLECCION.CREADA}
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input className="form-check-input" type="radio" name={`${m.id}`} id={`${m.id}-2`}
-                          defaultChecked={m.estado === ESTATUSRECOLECCION.RECOLECTADA ? true : false}
-                          onChange={(e) => onChangeStatus(m.id, ESTATUSRECOLECCION.RECOLECTADA)}
-                        />
-                        <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          {ESTATUSRECOLECCION.RECOLECTADA}
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input className="form-check-input" type="radio" name={`${m.id}`} id={`${m.id}-2`}
-                          defaultChecked={m.estado === ESTATUSRECOLECCION.ENRUTA ? true : false}
-                          onChange={(e) => onChangeStatus(m.id, ESTATUSRECOLECCION.ENRUTA)}
-                        />
-                        <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          {ESTATUSRECOLECCION.ENRUTA}
-                        </label>
-                      </div>
-
-                      <div className="form-check">
-                        <input className="form-check-input" type="radio" name={`${m.id}`} id={`${m.id}-2`}
-                          defaultChecked={m.estado === ESTATUSRECOLECCION.ENTREGADA ? true : false}
-                          onChange={(e) => onChangeStatus(m.id, ESTATUSRECOLECCION.ENTREGADA)}
-                        />
-                        <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          {ESTATUSRECOLECCION.ENTREGADA}
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input className="form-check-input" type="radio" name={`${m.id}`} id={`${m.id}-2`}
-                          defaultChecked={m.estado === ESTATUSRECOLECCION.NORECIBIDA ? true : false}
-                          onChange={(e) => onChangeStatus(m.id, ESTATUSRECOLECCION.NORECIBIDA)}
-                        />
-                        <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          {ESTATUSRECOLECCION.NORECIBIDA}
-                        </label>
-                      </div>
-
-                    </div>
-
-
-                  </td>
-
+                  <td>{m.estado}</td>
+                  <td>{m.empleadoAsignado.nombre + ' ' + m.empleadoAsignado.apellido}</td>
 
                   <td>
 
@@ -342,30 +394,36 @@ const Home = () => {
                       <i className="bi bi-card-list " ></i>
                     </button></div>
 
-                    <div> 
-                       <button className={`btn btn-danger ${m.estado !== ESTATUSRECOLECCION.CREADA && 'disabled'}  `}
-                      onClick={() => handlerDeleteButton(m.id)}
+                    <div>
+                      <button className={`btn btn-danger ${m.estado !== ESTATUSRECOLECCION.CREADA && 'disabled'}  `}
+                        onClick={() => handlerDeleteButton(m.id)}
 
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalDialog"
-                    >
-                      <i className="bi bi-trash3"></i>
-                    </button></div>
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalDialog"
+                      >
+                        <i className="bi bi-trash3"></i>
+                      </button></div>
 
                   </td>
                 </tr>)
             })}
-
+            
+            
 
 
           </tbody>
         </table>
-
-
-
       </div>
-      <ConfirmDialog handlerConfirmacion={handlerConfirmacion} mensaje={"Seguro desea Eliminar El registro"} idModal='modalDialog' ></ConfirmDialog>
-      <DetalleRecoleccion recoleccion={recoleccion} onChange={onChange} updateRecoleccion={updateRecoleccion} onSelect={onSelect} onChangeTotal={onChangeTotal} ></DetalleRecoleccion>
+      <ConfirmDialog mensaje={mensajeConfirmacion} handlerConfirmacion={handlerConfirmacion} idModal={idModal}></ConfirmDialog>
+      <DetalleRecoleccion
+        disableInputoCostoPRoducto={disableInputoCostoPRoducto}
+        recoleccion={recoleccion}
+        onChange={onChange}
+        updateRecoleccion={updateRecoleccion}
+        onSelect={onSelect}
+        onChangeTotal={onChangeTotal}
+        onChangePagaEnvio={onChangePagaEnvio}
+        empleados={empleados}></DetalleRecoleccion>
     </>
   )
 }

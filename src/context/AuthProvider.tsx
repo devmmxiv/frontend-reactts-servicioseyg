@@ -8,7 +8,7 @@ import { IMunicipio } from '../pages/interfaces/iMunicipio'
 
 const user1: IUser = {
     id: 0,
-    usuario: 'jperez',
+    usuario: 'odef',
     nombre: 'Juan Antonio',
     apellido: 'Perez',
     telefono: '5896-9632',
@@ -31,12 +31,18 @@ export const AuthProvider = ({ children }: props) => {
     const [municipios,setMunicipios]=useState<IMunicipio[]>([])
 
     const listaMunicipios = async () => {
-    
+      
         const d = await getMunicipios();
-        setMunicipios(d)
+
+        if(d !=null){
+            setMunicipios(d)
+ 
+
+        }
 
     }
     useEffect(() => {
+
         listaMunicipios();
         setLogged(true)
         

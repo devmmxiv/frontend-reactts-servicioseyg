@@ -37,6 +37,16 @@ const ModalCliente: FC<props> = ({ cliente, update, onChange, ManejadorDireccion
             setShowAlert(true);
             return
         }
+        if(cliente.direcciones.length==0){
+            setMensajeAlerta('Debe ingresar al menos una direccion')
+            setShowAlert(true);
+            return 
+        }
+        if(cliente.cuentas.length==0){
+            setMensajeAlerta('Debe ingresar al menos una cuenta Bancaria')
+            setShowAlert(true);
+            return 
+        }
         onSaveChanges()
 
     }

@@ -16,10 +16,10 @@ const PersonaEnvia = ({cliente}:props) => {
         <li>Telefono :<strong>{' '+cliente.telefono}</strong></li>
         
         <li>
-         Direccion:  <strong>{' '+cliente.direcciones[0].direccionCompleta}</strong>
+         Direccion:  <strong>{' '+cliente.direcciones[0]?.direccionCompleta}</strong>
         </li>
         <li>
-         Municipio:  <strong>{' '+cliente.direcciones[0].municipio.nombre}</strong>
+         Municipio:  <strong>{' '+cliente.direcciones[0]?.municipio.nombre}</strong>
         </li>
       </ul>
     </div>
