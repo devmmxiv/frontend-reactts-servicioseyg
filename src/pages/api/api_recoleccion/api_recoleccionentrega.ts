@@ -9,7 +9,10 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
         const resp = await fetch(`${API}/recoleccion-entrega`, {
         method: "POST",
         mode: "cors",
-       
+        headers: {
+          "Content-Type": "application/json",
+        
+        },
         body: JSON.stringify(  
         recoleccion
         ),
@@ -47,11 +50,14 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
 
   export const api_updateRecoleccionEstado = async (id: number, recoleccion: IActualizarEstadoRecoleccion) => {
     try{
-      console.log(recoleccion);
+
         const resp = await fetch(`${API}/recoleccion-entrega/update/estado/${recoleccion.id}`, {
         method: "PATCH",
         mode: "cors",
-       
+        headers: {
+          "Content-Type": "application/json",
+        
+        },
         body: JSON.stringify(  
         recoleccion
         ),
@@ -196,10 +202,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
       const resp = await fetch(`${API}/recoleccion-entrega/clientesbycierre/${idCierre}`, {
       method: "GET",
       mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      
-      },
+
     
     });
     const data = await resp.json().catch((error) => {

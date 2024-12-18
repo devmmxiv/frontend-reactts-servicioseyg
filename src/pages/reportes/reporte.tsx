@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 
-import { get_reporte } from '../api/api_reportes/apiReporte'
+import { get_reporte, get_reporteMenusal } from '../api/api_reportes/apiReporte'
 import { get_cierres } from '../api/api_cierre/api_cierre'
 import SelectSearchCierres from '../shared/select/SelectCierres';
 import { ICierre } from '../interfaces/ICierre';
@@ -15,6 +15,7 @@ import { dateToString } from '../../utils/utilidades';
 
 
 
+
 const Reporte = () => {
 
   const [cierres, setCierres] = useState<ICierre[]>([])
@@ -24,52 +25,69 @@ const Reporte = () => {
   const [idCliente, setIdCliente] = useState<number>(0)
   const [idClienteMes, setIdClientMes] = useState<number>(0)
   const [show, setShow] = useState(false)
+
+
   const [url, setUrl] = useState('http:localhost:3000')
   const [disable, setDisable] = useState(true)
   const [fechaInicio,setFechaInicio]=useState(new Date());
   const [fechaFin,setFechaFin]=useState(new Date());
+  const [titulo,setTitulo]=useState("");
   const data = async (idCierre: number, idCliente: number) => {
     const resp = await get_reporte(idCierre, idCliente);
+
     if (resp?.status === 200) {
 
       const data = await resp.arrayBuffer()
       const blob = new Blob([data], { type: 'application/pdf' })
       const url = URL.createObjectURL(blob)
-      console.log(url)
+     
       setUrl(url)
       setShow(true)
+  
     } else {
       setShow(false)
     }
   }
 
   const dataReporteClienteMensual = async (idCliente: number,fecha:string) => {
-    const resp = await get_reporte(idCierre, idCliente);
-    if (resp?.status === 200) {
+    const resp = await get_reporteMenusal(idCliente, fecha);
 
+    if (resp?.status === 200) {
+     
       const data = await resp.arrayBuffer()
       const blob = new Blob([data], { type: 'application/pdf' })
       const url = URL.createObjectURL(blob)
-      console.log(url)
+ 
       setUrl(url)
       setShow(true)
+      
     } else {
+      setTitulo("Mensaje: No hay Informacion para el reporte")
       setShow(false)
     }
   }
   const onClick = () => {
-
+ 
+  
     if (idCierre > 0) {
-
+      setTitulo("Reporte de Cierre de Recolecciones")
       data(idCierre, idCliente)
     }
   }
   const onClickReporteMensual = () => {
+    setShow(false)
+ 
+    if(idClienteMes>0){
+    setTitulo("Reporte de Cierre Mensual por Cliente")
     const f=dateToString(fechaInicio);
-    const fin=dateToString(fechaFin);
-    console.log(`fecha inicio ${f} fecha fin ${fin}`);
-//aqui es reporte mensual por cliente
+ 
+    dataReporteClienteMensual(idClienteMes,f)
+    
 
+    }else{
+    
+      setTitulo("Error!! Debe de Seleccionar un Cliente")
+    }
   }
 
   const handleSelect = (label?: string, value?: number) => {
@@ -94,6 +112,7 @@ const Reporte = () => {
     }
   }
   const handleSelectClienteMes = (label?: string, value?: number) => {
+    console.log(`valor id cliente ${value}`)
     if (value === undefined) {
       setIdClientMes(0)
 
@@ -171,7 +190,7 @@ const Reporte = () => {
 
             </div>
 
-            <ModalReporte show={show} url={url}></ModalReporte>
+            <ModalReporte show={show} url={url} titulo={titulo} idModal='modalReporte'></ModalReporte>
           </div>
           <div className="pane py-2 px-3">
             <div>
@@ -191,7 +210,7 @@ const Reporte = () => {
         <div className="card-body p-0">
           <div className="pane py-2 px-3 border-bottom">
             <div>
-              <h2 className="card-title mb-3 mt-0 lead">Reportes por Cliente y Fecha</h2>
+              <h2 className="card-title mb-3 mt-0 lead">Reporte para cobros  de Envios por Mes y Cliente</h2>
               <p className="text-muted">
                 Seleccione el cliente y el mes del reporte
               </p>
@@ -202,13 +221,14 @@ const Reporte = () => {
             <SelectClientes clientes={clientes2} handleSelect={handleSelectClienteMes}></SelectClientes>
        
             <FechaPicker fechaMes={fechaInicio} handleDate={handledate}></FechaPicker>
-            <ModalReporte show={show} url={url}></ModalReporte>
+            <ModalReporte show={show} url={url} titulo={titulo} idModal='modalReporteMes'></ModalReporte>
           </div>
           <div className="pane py-2 px-3">
             <div>
               <button
                 className="btn btn-flat btn-sm btn-outline-danger ms-auto m-1"
-              
+                data-bs-toggle="modal"
+                data-bs-target="#modalReporteMes"
                 onClick={onClickReporteMensual}
               
               >Generar Reporte por Cliente</button>

@@ -7,22 +7,26 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 interface props {
     show: boolean
-    url:string
+    url:string,
+    titulo:string,
+    idModal:string
 }
-const ModalReporte = ({ show ,url}: props) => {
+const ModalReporte = ({ show ,url,titulo,idModal}: props) => {
       const defaultLayoutPluginInstance = defaultLayoutPlugin();
+   console.log(`show ${show}`)
     return (
         <div >
 
-            <div className="modal fade" id="modalReporte" data-bs-keyboard="true" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div className="modal fade" id={idModal} data-bs-keyboard="true" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">Listado de Recolecciones a Cerrar</h1>
+                            <h1 className="modal-title fs-5" id="staticBackdropLabel">{titulo}</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
-                            {show && (
+                            {show && 
+                            (
                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
 
                                     <Viewer fileUrl={url} plugins={[defaultLayoutPluginInstance]} />;
@@ -30,7 +34,7 @@ const ModalReporte = ({ show ,url}: props) => {
                             )}
                         </div>
                         <div className="modal-footer">
-                                <button type="button" id='btnCerrarModalCliente' className="btn btn-secondary" 
+                                <button type="button"  className="btn btn-secondary" 
                                 data-bs-dismiss="modal" 
                              >Cerrar</button>
                        

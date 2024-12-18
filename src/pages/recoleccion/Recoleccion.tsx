@@ -96,6 +96,7 @@ const Recoleccion = () => {
     const [empleados,setEmpleados]=useState<IEmpleado[]>([initEmpleado]);
     
     const handleSelect = (label?: string, value?: number) => {
+
         const c = clientes.filter(x => x.id === value)
         const d = clientes[0].direcciones.filter(d => d.tipoDireccion === ETipoDireccion.PRINCIPAL)
         if (c.length === 0) {
@@ -123,7 +124,7 @@ const Recoleccion = () => {
         if (c.length >0) {
 
        
-          //  console.log( c[0].id)
+           console.log( c[0].id)
             setRecoleccion({
                 ...recolecion,
                 'empleadoAsignado': c[0],
@@ -407,6 +408,8 @@ const Recoleccion = () => {
                                             onChange={(e) => handleSelectEmpleadoRecolecta(e.target.value)}
                                             value={recolecion.empleadoAsignado.id}
                                         >
+                                        
+                                        <option value={0}>Seleccione Empleado Recolecta</option>
                                                 {empleados.map((e)=>{return(
                                                     <option value={e.id}>{e.nombre + ' '+e.apellido}</option>
                                                 )})}

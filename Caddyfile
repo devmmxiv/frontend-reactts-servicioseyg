@@ -24,12 +24,12 @@
     rewrite /health /*
 
     # serve from the 'dist' folder (Vite builds into the 'dist' folder)
-    root * dist
+    root * build
 
     # enable gzipping responses
     encode gzip
 
-    # serve files from 'dist'
+    # serve files from 'build'
     file_server
 
     # if path doesn't exist, redirect it to 'index.html' for client side routing
