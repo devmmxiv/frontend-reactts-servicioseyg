@@ -8,6 +8,8 @@ import { AuthProvider } from './context/AuthProvider';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap-icons//font/bootstrap-icons.min.css'
+import { LoginProvider } from './context/LoginContext';
+import MunicipioContext, { MunicipioProvider } from './context/MunicipiosContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,15 +17,15 @@ const root = ReactDOM.createRoot(
 root.render(
 <React.StrictMode>
     <BrowserRouter>   
-    <AuthProvider>
-     <App />
-     </AuthProvider>
+    <LoginProvider>
+      <MunicipioProvider> 
+        <App />
+        </MunicipioProvider>
+    
+     </LoginProvider>
     </BrowserRouter>
     </React.StrictMode>
 
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 

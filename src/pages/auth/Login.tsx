@@ -1,7 +1,14 @@
-import React from 'react'
-import Profile from './Profile'
+import { useContext, useState } from "react"
+import LoginContext from "../../context/LoginContext";
+import { useLogin } from "../hooks/useLogin";
+
 
 const Login = () => {
+const {handleLogin}=useLogin()
+const  [usuario,setUsuario]=useState("")
+const [passwd,setPasswd]=useState("");
+
+
   return (
 <section className="bg-light p-3 p-md-4 p-xl-5">
   <div className="container">
@@ -14,10 +21,10 @@ const Login = () => {
                 <div className="mb-5">
                   <div className="text-center mb-4">
                     <a href="#!">
-                      <img src="../logo192.png" alt="BootstrapBrain Logo" width={175} height={57} />
+                      <img src="../logoEyG.png" alt="BootstrapBrain Logo"  />
                     </a>
                   </div>
-                  <h4 className="text-center">Bienvenido al sistema de paqueteria Servicios EyG</h4>
+              
                 </div>
               </div>
             </div>
@@ -25,20 +32,28 @@ const Login = () => {
               <div className="row gy-3 overflow-hidden">
                 <div className="col-12">
                   <div className="form-floating mb-3">
-                    <input type="email" className="form-control" name="email" id="email" placeholder="name@example.com" required />
-                    <label htmlFor="email" className="form-label">Usuario</label>
+                    <input type="text" className="form-control" name="usuario" id="user" required 
+                    value={usuario}
+                    onChange={(e)=>{setUsuario(e.target.value)}}
+                    />  
+                    <label htmlFor="user" className="form-label">Usuario</label>
                   </div>
                 </div>
                 <div className="col-12">
                   <div className="form-floating mb-3">
-                    <input type="password" className="form-control" name="password" id="password" defaultValue placeholder="Password" required />
+                    <input type="password" className="form-control" name="password" id="password"  placeholder="Password" required 
+                    value={passwd}
+                    onChange={(e)=>setPasswd(e.target.value)}
+                    />
                     <label htmlFor="password" className="form-label">Contraseña</label>
                   </div>
                 </div>
                
                 <div className="col-12">
                   <div className="d-grid">
-                    <button className="btn bsb-btn-xl btn-primary" type="submit">Ingresar</button>
+                    <button className="btn bsb-btn-xl btn-primary" type="button"
+                    onClick={()=>{handleLogin(usuario,passwd)}}
+                    >Ingresar</button>
                   </div>
                 </div>
               </div>
@@ -64,3 +79,4 @@ const Login = () => {
 }
 
 export default Login
+

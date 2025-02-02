@@ -6,6 +6,8 @@ import { ETipoCuentaBancaria, ICuentaBancaria } from "../interfaces/ICuentaBanca
 
 import { api_createCliente, api_getClientes, api_updateCliente } from '../api/api_cliente/apiclientes'
 import * as f from './functions'
+import { api_newUser } from "../api/api_user/apiUser"
+import { useLogin } from "../hooks/useLogin"
 
 
 
@@ -36,7 +38,7 @@ const Cliente = () => {
   const [show, setShow] = useState(false)
   const [mensaje, setMensaje] = useState('')
 
-
+  const{userLogin}=useLogin()
 
 
 
@@ -58,10 +60,22 @@ const Cliente = () => {
   const onSaveChanges = async () => {
    
     if (!update) {
+      //primero creamos el usaurio
+    
+      const a=cliente.nombre.charAt(0);
+      const b=cliente.apellido.split(" ");
+      const apellido=b[0];
+      const username=a+apellido;
 
-      const resp = await api_createCliente(cliente);
-      f.alerta('Cliente Creado con Exito')
-      setCliente(initCliente)
+      const respuser=await api_newUser(userLogin.token,username.toLowerCase())
+      if(respuser?.status){
+        const resp = await api_createCliente(cliente);
+        f.alerta('Cliente Creado con Exito')
+        setCliente(initCliente)
+      }else{
+        f.alerta('No se pudo crear el cliente')
+      }
+
     } else {
  
       const resp = await api_updateCliente(cliente);

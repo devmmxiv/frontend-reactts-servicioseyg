@@ -4,7 +4,7 @@ import SelectSearch from '../shared/select/SelectSearch'
 import { ICliente } from '../interfaces/ICliente'
 import { api_getClientes } from '../api/api_cliente/apiclientes'
 import { ETipoDireccion, IDireccion } from '../interfaces/IDireccion'
-import { useAuth } from '../hooks/useAuth'
+
 import { ESTATUSRECOLECCION, IRecoleccionEntrega, TIPOPAGO } from '../interfaces/IRecoleccionEntrega'
 
 import { api_recoleccion } from '../api/api_recoleccion/api_recoleccionentrega'
@@ -15,6 +15,7 @@ import SelectEmpleados from '../shared/select/selectEmpleado'
 import { IEmpleado } from '../interfaces/IEmpleado'
 import { IMunicipio } from '../interfaces/iMunicipio'
 import Direccion from '../cliente/direccion/Direccion'
+import { useMunicipios } from '../hooks/useMunicipios'
 
 const init: ICliente = {
     id: 0,
@@ -88,7 +89,7 @@ const Recoleccion = () => {
     const [show, setShow] = useState(false)
     const [message, setMessage] = useState('')
     const [clase, setClase] = useState('')
-    const { municipios } = useAuth()
+    const { municipios } = useMunicipios()
     const [clientes, setCliente] = useState<ICliente[]>([])
     const [envia, setEnvia] = useState<ICliente>(init)
     const [recolecion, setRecoleccion] = useState<IRecoleccionEntrega>(recoleccionEntrega)

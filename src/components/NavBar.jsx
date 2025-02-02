@@ -1,5 +1,6 @@
 
 
+
 import Profile from '../pages/auth/Profile';
 
 const NavBar = () => {
@@ -12,11 +13,12 @@ const NavBar = () => {
         <div className="navbar navbar expand-lg bg-light m-1">
         <div className="container-fluid">
         <a className="navbar-brand me-auto" href="#"> <i className="fa fa-tags m-2" aria-hidden="true"></i><strong>Servicios EyG</strong></a>
-        <Profile  ></Profile>
+       <Profile  ></Profile>
+     
           <a  className="navbar-brand ml-auto" href="#"> </a >
 
           <div className="vr m-2"></div>
-          <a href="#" className="navbar-brand ml-auto "><i className="fa fa-power-off m-2" aria-hidden="true"></i><strong>Salir</strong></a>
+          <a href="/" className="navbar-brand ml-auto "><i className="fa fa-power-off m-2" aria-hidden="true"></i><strong>Salir</strong></a>
  
         </div>
         </div>

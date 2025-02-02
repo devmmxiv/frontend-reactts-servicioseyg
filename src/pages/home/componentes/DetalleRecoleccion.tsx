@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useAuth } from "../../hooks/useAuth"
+import { useMunicipios } from "../../hooks/useMunicipios"
 import { ESTATUSRECOLECCION, IRecoleccion, TIPOPAGO } from "../../interfaces/IRecoleccionEntrega"
 import ConfirmDialog from "../../shared/confirmDialog/ConfirmDialog"
 import { IEmpleado } from "../../interfaces/IEmpleado";
@@ -18,7 +18,7 @@ interface props {
 const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect,onChangeTotal ,onChangePagaEnvio,disableInputoCostoPRoducto,empleados}: props) => {
 
 
-    const { municipios } = useAuth()
+    const { municipios } = useMunicipios()
     const handlerConfirmacion = () => {
   
         updateRecoleccion()

@@ -54,7 +54,7 @@ const MainDirecciones
 
    if(e.target.name==='tipoDireccion'){
     let nombre=e.target.name;
-    console.log(nombre)
+
     setDireccion({...direccion,[nombre]:e.target.value})
 
    }else{

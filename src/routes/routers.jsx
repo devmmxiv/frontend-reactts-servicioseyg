@@ -5,19 +5,20 @@ import Home from '../pages/home/Home'
 import Login from '../pages/auth/Login'
 import Cliente from '../pages/cliente/Cliente'
 import Recoleccion from "../pages/recoleccion/Recoleccion";
-import { useAuth } from "../pages/hooks/useAuth";
+import { useLogin } from "../pages/hooks/useLogin";
 import Proceso from '../pages/procesos/Proceso'
 import Reporte from "../pages/reportes/reporte";
 
 const MisRutas = () => {
-  const {logged}=useAuth()
+  const {userLogin}=useLogin()
   return (
     <Routes>
       <Route
         element={
           <ProtectedRoutes
-            canActivate={logged}
+            canActivate={userLogin.logged}
             redirectPath="/home"
+         
           />
         }
       >
@@ -29,6 +30,7 @@ const MisRutas = () => {
         <Route path="/reportes" exact={true} Component={Reporte}></Route>
       </Route>
       <Route path="/login" exact={true} Component={Login}></Route>
+
     </Routes>
   )
 }

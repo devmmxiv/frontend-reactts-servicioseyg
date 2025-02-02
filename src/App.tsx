@@ -7,15 +7,23 @@ import Content from './components/Content';
 import Footer from './components/Footer';
 import { useAuth } from './pages/hooks/useAuth';
 import Login from './pages/auth/Login';
+import { useContext } from 'react';
+import LoginContext from './context/LoginContext';
+import { useLogin } from './pages/hooks/useLogin';
+import { PerfilProvider } from './context/PerfilContext';
 
 function App() {
-  const { logged } = useAuth()
+ const {userLogin}=useLogin()
+
+  //console.log(user.logged)
+  //const { logged } = useAuth()
   return (
     <>
-      {!logged ?
+      {!userLogin.logged ?
         <Login></Login>
 
-        : (<><NavBar></NavBar>
+        : (<>
+        <PerfilProvider><NavBar></NavBar></PerfilProvider>
           <div className='flex'>
             <Asid></Asid>
             <Content></Content>
@@ -24,11 +32,6 @@ function App() {
 
         </>)
       }
-
-
-
-
-
     </>
   );
 }

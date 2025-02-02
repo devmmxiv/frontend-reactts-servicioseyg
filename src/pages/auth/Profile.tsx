@@ -3,35 +3,76 @@ import { Link } from 'react-router-dom'
 import Departamento from '../shared/Departamento'
 
 
-import { useAuth } from '../hooks/useAuth'
-import { useEffect, useState } from 'react'
+
+import {  useEffect, useState } from 'react'
 import { IMunicipio } from '../interfaces/iMunicipio'
 
+import { IUser } from '../interfaces/iUser'
+import { usePerfil } from '../hooks/usePerfil'
+import { useLogin } from '../hooks/useLogin'
+import { ETipoDireccion } from '../interfaces/IDireccion'
+const user: IUser = {
+    id: 0,
+    codigo:'000',
+    usuario: '',
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    direccion: {
+        id: 1,
+        direccionCompleta: '',
+        calle: 0,
+        avenida: 0,
+        zona: 0,
+        tipoDireccion: ETipoDireccion.PRINCIPAL,
+        municipio: {
+            id: 1,
+            nombre: 'Amatitlan',
+          
+        },
+    },
+   
+    isCliente:false
+}
 
 const Profile = () => {
-    const { user } = useAuth()
+    const {handlePerfil,perfil}=usePerfil()
+    const {userLogin}=useLogin()
     const [usuario, setUsuario] = useState(user)
     const [show, setShow] = useState(false)
 
     const onselect = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const id: number = Number(e.target.value)
         const m: IMunicipio = { id: id, nombre: e.target[e.target.selectedIndex].textContent?.toString() }
-
-        setUsuario({ ...usuario, municipio: m })
+        
+        setUsuario({ ...usuario,direccion:{...usuario.direccion,municipio:m}})
 
     }
     const toogle=()=>{
         setShow(!show)
     }
+    const getPerfil=()=>{
+        handlePerfil(userLogin);
+        setUsuario({...usuario,
+            id:perfil.id,
+            usuario:perfil.usuario,
+            codigo:perfil.codigo,
+            nombre:perfil.nombre,
+            apellido:perfil.apellido,
+            direccion:perfil.direccion})
+    }
     useEffect(() => {
-        setUsuario(user)
+
+        getPerfil()
+       // setUsuario(user)
     }, [show])
     return (
         <>
             <div>
                 {/* Button trigger modal */}
                 <Link to='#' onClick ={()=>toogle()}className='link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'
-                    data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa fa-user-circle-o m-2" aria-hidden="true"></i><strong>{usuario.usuario}</strong>
+                    data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa fa-user-circle-o m-2" aria-hidden="true"></i>
+                    <strong>{perfil.isCliente?'Cliente':'Codigo Empleado'}-{perfil.codigo}-{perfil.usuario}</strong>
 
                 </Link>
                 {/* Modal */}
@@ -75,7 +116,7 @@ const Profile = () => {
                                         <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 
                                         readOnly/>
                                     </div>
-                                    <Departamento id={usuario.municipio.id} onselect={onselect}></Departamento>
+                                    <Departamento id={usuario.direccion.municipio.id} onselect={onselect}></Departamento>
 
                                 </form>
 

@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { ICliente } from '../interfaces/ICliente';
+import { useMunicipios } from '../hooks/useMunicipios';
 interface props {
   id: number;
   onselect:(e:React.ChangeEvent<HTMLSelectElement>)=>void
 
 }
 const Departamento = ({ id,onselect }: props) => {
-  const { municipios } = useAuth()
+  const { municipios } = useMunicipios()
 
   return (
     <>
