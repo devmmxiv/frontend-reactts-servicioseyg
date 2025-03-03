@@ -29,10 +29,10 @@ const user1: IUserLogin = {
 const LoginProvider= ({children}:props)=>{
 
 
-
+  
     const [userLogin,setUser]=useState(user1)
     const handleLogin=async(usuario:String,passwd:String)=>{
-    const resp = await api_login(usuario,passwd);
+        const resp = await api_login(usuario,passwd);
         if(resp?.status==201){
             const data = await resp.json().catch((error) => {
                 console.log("error en fetch data", error);

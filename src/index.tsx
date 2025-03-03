@@ -11,6 +11,7 @@ import 'bootstrap-icons//font/bootstrap-icons.min.css'
 import { LoginProvider } from './context/LoginContext';
 import MunicipioContext, { MunicipioProvider } from './context/MunicipiosContext';
 
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -18,6 +19,7 @@ root.render(
 <React.StrictMode>
     <BrowserRouter>   
     <LoginProvider>
+
       <MunicipioProvider> 
         <App />
         </MunicipioProvider>

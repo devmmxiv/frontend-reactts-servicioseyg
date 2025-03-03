@@ -1,13 +1,42 @@
 import { useContext, useState } from "react"
 import LoginContext from "../../context/LoginContext";
 import { useLogin } from "../hooks/useLogin";
+import Alert from "../shared/Alert";
+import { ToggleButton } from "react-bootstrap";
 
 
 const Login = () => {
-const {handleLogin}=useLogin()
+const {handleLogin,userLogin}=useLogin()
 const  [usuario,setUsuario]=useState("")
 const [passwd,setPasswd]=useState("");
 
+const [show,setShow]=useState(false);
+const [message,setMessage]=useState("0")
+const [clase,setClase]=useState("warning")
+const toggle=()=>{
+  setShow(!show);
+}
+  const  handleSubmit=()=> {
+ 
+    if(usuario=="" || passwd==""){
+ 
+      setShow(true);
+      
+      setMessage("Debe ingresar usuario y contraseña");
+      return
+    }
+    handleLogin(usuario,passwd)
+    if(!userLogin.logged){
+      setShow(true);
+      
+      setMessage("Usuario o contraseña incorrectos");
+      return
+    }
+  }
+
+  function han(n:string): boolean {
+    throw new Error("Function not implemented.");
+  }
 
   return (
 <section className="bg-light p-3 p-md-4 p-xl-5">
@@ -18,6 +47,7 @@ const [passwd,setPasswd]=useState("");
           <div className="card-body p-3 p-md-4 p-xl-5">
             <div className="row">
               <div className="col-12">
+              <Alert show={show} mensaje={message} toogle={toggle} clase={clase}></Alert>
                 <div className="mb-5">
                   <div className="text-center mb-4">
                     <a href="#!">
@@ -28,7 +58,7 @@ const [passwd,setPasswd]=useState("");
                 </div>
               </div>
             </div>
-            <form action="#!">
+            <form onSubmit={handleSubmit}>
               <div className="row gy-3 overflow-hidden">
                 <div className="col-12">
                   <div className="form-floating mb-3">
@@ -52,7 +82,7 @@ const [passwd,setPasswd]=useState("");
                 <div className="col-12">
                   <div className="d-grid">
                     <button className="btn bsb-btn-xl btn-primary" type="button"
-                    onClick={()=>{handleLogin(usuario,passwd)}}
+                    onClick={()=>{handleSubmit()}}
                     >Ingresar</button>
                   </div>
                 </div>

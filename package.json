@@ -15,9 +15,11 @@
     "@types/react-dom": "^18.3.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "classnames": "^2.5.1",
     "moment-timezone": "^0.5.46",
     "pdfjs-dist": "^3.4.120",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.9",
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
@@ -53,6 +55,6 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/bootstrap": "^5.2.10",
-    "@types/jquery": "^3.5.30"
+    "@types/jquery": "^3.5.32"
   }
 }

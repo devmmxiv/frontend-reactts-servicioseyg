@@ -15,8 +15,13 @@ const Asid = () => {
             </NavLink>
             </li>
          
-            <li id="2" className="mb-3">
-            <NavLink to="/recoleccion" 
+       <li id="2" className="mb-3">
+              {/* <NavLink to="/recoleccion" 
+            className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+            <i className="bi bi-box-fill me-2 " aria-hidden="true"></i>Crear Recoleccion
+            </NavLink>*/}
+          
+            <NavLink to="/recoleccionn" 
             className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
             <i className="bi bi-box-fill me-2 " aria-hidden="true"></i>Crear Recoleccion
             </NavLink>

@@ -1,16 +1,10 @@
 import './select.css'
 import Select, { SingleValue } from 'react-select'
+import { useCrudRecoleccion } from '../../hooks/useCrudRecoleccion'
 
-import { ICliente } from '../../interfaces/ICliente'
-
-
-interface props{
-  clientes:ICliente[]
-  handleSelect: (label?:string,value?:number)=>void
-}
-const SelectSearch = ({clientes,handleSelect}:props) => {
+const SelectSearchCliente = () => {
   
-
+  const {clientes,handleSelect}=useCrudRecoleccion()
 
 
   return (
@@ -31,4 +25,4 @@ const SelectSearch = ({clientes,handleSelect}:props) => {
   )
 }
 
-export default SelectSearch
+export default SelectSearchCliente

@@ -61,7 +61,7 @@ export const api_createCliente = async (client:ICliente) => {
             const data = await resp.json().catch((error) => {
                 console.log("error en fetch data", error);
             });
-  
+            console.log(data)
             return data;
         } else {
             return resp;

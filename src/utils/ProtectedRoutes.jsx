@@ -5,7 +5,7 @@ const ProtectedRoutes = ({
 }) => {
     console.log('protectesdroutes')
     if(!canActivate){
-        console.log('cantActivate',canActivate);
+
         return <Navigate to={redirecPath}></Navigate>
     }
 

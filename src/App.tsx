@@ -11,12 +11,13 @@ import { useContext } from 'react';
 import LoginContext from './context/LoginContext';
 import { useLogin } from './pages/hooks/useLogin';
 import { PerfilProvider } from './context/PerfilContext';
+import { CrudClienteProvider } from './context/CrudRecoleccionContext';
+
 
 function App() {
  const {userLogin}=useLogin()
 
-  //console.log(user.logged)
-  //const { logged } = useAuth()
+
   return (
     <>
       {!userLogin.logged ?
@@ -25,8 +26,13 @@ function App() {
         : (<>
         <PerfilProvider><NavBar></NavBar></PerfilProvider>
           <div className='flex'>
-            <Asid></Asid>
-            <Content></Content>
+            <Asid></Asid>        
+            <CrudClienteProvider>
+          
+              <Content></Content>
+           
+              </CrudClienteProvider>
+ 
 
           </div>
 

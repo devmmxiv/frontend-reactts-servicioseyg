@@ -6,21 +6,21 @@ import { IEmpleado } from "../../interfaces/IEmpleado";
 
 interface props {
     recoleccion: IRecoleccion;
-    disableInputoCostoPRoducto:boolean;
+    disableInputoCostoPRoducto: boolean;
     updateRecoleccion: () => void;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onChangeTotal: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    onChangePagaEnvio:(e:boolean)=>void;
-    empleados:IEmpleado[]
+    onChangePagaEnvio: (e: boolean) => void;
+    empleados: IEmpleado[]
 }
 
-const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect,onChangeTotal ,onChangePagaEnvio,disableInputoCostoPRoducto,empleados}: props) => {
+const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect, onChangeTotal, onChangePagaEnvio, disableInputoCostoPRoducto, empleados }: props) => {
 
 
     const { municipios } = useMunicipios()
     const handlerConfirmacion = () => {
-  
+
         updateRecoleccion()
     }
 
@@ -116,10 +116,10 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
                                 <input type="number" className="form-control" aria-describedby="emailHelp"
                                     value={recoleccion.totalCobrar}
                                     name='totalCobrar'
-                                    
+
                                     disabled={disableInputoCostoPRoducto}
-                                   onChange={(e) => onChangeTotal(e)}
-                                  //  onChange={(e) => onChange(e)}
+                                    onChange={(e) => onChangeTotal(e)}
+                                //  onChange={(e) => onChange(e)}
                                 />
                             </div>
                             <div className="input-group mb-3" >
@@ -127,61 +127,63 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
                                 <input type="number" className="form-control" aria-describedby="emailHelp"
                                     value={recoleccion.precioEnvio}
                                     name='precioEnvio'
-                                    
-                                  
-                                  // onChange={(e) => onChangeTotal(e)}
-                                   onChange={(e) => onChange(e)}
+
+
+                                    // onChange={(e) => onChangeTotal(e)}
+                                    onChange={(e) => onChange(e)}
                                 />
                             </div>
                             <div className="input-group mb-3">
 
-                            <span className="input-group-text bi"><i className="bi bi-person-add p-1"></i>Empleado Asignado</span>
+                                <span className="input-group-text bi"><i className="bi bi-person-add p-1"></i>Empleado Asignado</span>
 
 
-                                        <select className="form-select" aria-label="Default select example" name='empleadoAsignado'
-                                           onChange={(e) => onSelect(e)}
-                                            value={recoleccion.empleadoAsignado.id}
-                                        >
-                                                {empleados.map((e)=>{return(
-                                                    <option value={e.id}>{e.nombre + ' '+e.apellido}</option>
-                                                )})}
-                                            
-                                    
-                                        </select>
-
-                                    </div>
-                                    <div className="input-group mb-3">
-
-                            <span className="input-group-text bi"><i className="bi bi-person-add p-1"></i>Estado</span>
+                                <select className="form-select" aria-label="Default select example" name='empleadoAsignado'
+                                    onChange={(e) => onSelect(e)}
+                                    value={recoleccion.empleadoAsignado.id}
+                                >
+                                    {empleados.map((e) => {
+                                        return (
+                                            <option value={e.id}>{e.nombre + ' ' + e.apellido}</option>
+                                        )
+                                    })}
 
 
-                                        <select className="form-select" aria-label="Default select example" name='estado'
-                                           onChange={(e) => onSelect(e)}
-                                            value={recoleccion.estado}
-                                        >
-                                                 
-                                                    <option value={ESTATUSRECOLECCION.CREADA}>{ESTATUSRECOLECCION.CREADA}</option>
-                                                    <option value={ESTATUSRECOLECCION.RECOLECTADA}>{ESTATUSRECOLECCION.RECOLECTADA}</option>
-                                                    <option value={ESTATUSRECOLECCION.ENRUTA}>{ESTATUSRECOLECCION.ENRUTA}</option>
-                                                    <option value={ESTATUSRECOLECCION.ENTREGADA}>{ESTATUSRECOLECCION.ENTREGADA}</option>
-                                                    <option value={ESTATUSRECOLECCION.NORECIBIDA}>{ESTATUSRECOLECCION.NORECIBIDA}</option>
-                                    
-                                        </select>
+                                </select>
 
-                                    </div>
-          
-                           
-                       
+                            </div>
+                            <div className="input-group mb-3">
+
+                                <span className="input-group-text bi"><i className="bi bi-person-add p-1"></i>Estado</span>
+
+
+                                <select className="form-select" aria-label="Default select example" name='estado'
+                                    onChange={(e) => onSelect(e)}
+                                    value={recoleccion.estado}
+                                >
+
+                                    <option value={ESTATUSRECOLECCION.CREADA}>{ESTATUSRECOLECCION.CREADA}</option>
+                                    <option value={ESTATUSRECOLECCION.RECOLECTADA}>{ESTATUSRECOLECCION.RECOLECTADA}</option>
+                                    <option value={ESTATUSRECOLECCION.ENRUTA}>{ESTATUSRECOLECCION.ENRUTA}</option>
+                                    <option value={ESTATUSRECOLECCION.ENTREGADA}>{ESTATUSRECOLECCION.ENTREGADA}</option>
+                                    <option value={ESTATUSRECOLECCION.NORECIBIDA}>{ESTATUSRECOLECCION.NORECIBIDA}</option>
+
+                                </select>
+
+                            </div>
+
+
+
                         </div>
                         <div className="modal-footer">
                             <button type="button" id='btnCerrarModalCliente' className="btn btn-secondary"
                                 data-bs-dismiss="modal"
-                         
+
                             >Cerrar</button>
                             <button type="button" className="btn btn-primary"
-                                   
+
                                 data-bs-toggle="modal"
-                                data-bs-target="#modalUpdateConfirmacion"    
+                                data-bs-target="#modalUpdateConfirmacion"
                             >Grabar </button>
                         </div>
                     </div>
@@ -189,27 +191,27 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
             </div>
 
             <div className="modal fade" id="modalUpdateConfirmacion" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Pregunta de Confirmacion</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <div className="modal-body">
-              <p id='p1'>Seguro desea Actualizar el Registro</p>
-            </div>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Pregunta de Confirmacion</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div className="modal-body">
+                            <p id='p1'>Seguro desea Actualizar el Registro</p>
+                        </div>
 
-            <div className="modal-footer">
-              <button type="button" className="btn btn-success" onClick={handlerConfirmacion}  data-bs-dismiss="modal">SI</button>
-              <button type="button" 
-              className="btn btn-danger"  
-              data-bs-target='#modalUpdateRecoleccion'
-              
-              data-bs-toggle="modal">NO</button>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-success" onClick={handlerConfirmacion} data-bs-dismiss="modal">SI</button>
+                            <button type="button"
+                                className="btn btn-danger"
+                                data-bs-target='#modalUpdateRecoleccion'
+
+                                data-bs-toggle="modal">NO</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
         </>
     )
 }

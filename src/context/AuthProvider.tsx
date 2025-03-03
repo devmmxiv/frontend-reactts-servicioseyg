@@ -37,7 +37,7 @@ interface props {
     children: JSX.Element | JSX.Element[]
 }
 export const AuthProvider = ({ children }: props) => {
-    console.log("Entre al provider")
+  
     const [user,setUsuario]=useState<IUser>(user1)
     const [logged,setLogged]=useState<boolean>(false)
     const [municipios,setMunicipios]=useState<IMunicipio[]>([])

@@ -25,6 +25,8 @@ export const api_login = async (user:String,passwd:String) => {
         console.log("Erron en fetch",error)
     }
   };
+
+
   export const api_dataUser = async (token:String) => {
     try{
 

@@ -65,7 +65,7 @@ const PerfilProvider= ({children}:props)=>{
                 const data = await resp.json().catch((error) => {
                     console.log("error en fetch data", error);
                   });
-                  console.log('dataperfilempleado',data)
+               
                 try{ setPerfil({...perfil,id:data.id,
                      usuario:userLogin.username,
                      codigo:data.codigoEmpleado,

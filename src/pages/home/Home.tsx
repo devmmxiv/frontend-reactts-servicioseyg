@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ESTATUSRECOLECCION, IActualizarEstadoRecoleccion, IRecoleccion, TIPOPAGO, } from '../interfaces/IRecoleccionEntrega'
-import { api_getRecoleccion, api_updateRecoleccionEstado, api_deleteRecoleccion, api_updateRecoleccion } from '../api/api_recoleccion/api_recoleccionentrega'
+import { api_getRecoleccion, api_updateRecoleccionEstado, api_deleteRecoleccion, api_updateRecoleccion, api_getRecoleccionPagination } from '../api/api_recoleccion/api_recoleccionentrega'
 import ConfirmDialog from '../shared/confirmDialog/ConfirmDialog'
 
 import * as f from './util.js'
@@ -8,6 +8,8 @@ import DetalleRecoleccion from './componentes/DetalleRecoleccion'
 import { IMunicipio } from '../interfaces/iMunicipio'
 import { IEmpleado } from '../interfaces/IEmpleado'
 import { api_getEmpleados } from '../api/api_empleado/apiempleado'
+import Pagination from '../shared/pagination/Pagination'
+import { Table } from 'react-bootstrap'
 
 const initEmpleado: IEmpleado = {
   id: 0,
@@ -60,14 +62,25 @@ const Home = () => {
   const [recoleccion, setRecoleccion] = useState<IRecoleccion>(init)
   const [disableInputoCostoPRoducto, setdisableCostoPRoducto] = useState(false);
   const [empleados, setEmpleados] = useState<IEmpleado[]>([initEmpleado]);
+  const [currentPage,setCurrentPage]=useState(0)
+  const [count,setCount]=useState(0)
+  const [take,setTake]=useState(0)
 
-  const obtenerRecolecciones = async () => {
-    const resultado = await api_getRecoleccion()
+  const obtenerRecolecciones = async (take:number,page:number=1) => {
+    const resultado = await api_getRecoleccionPagination(take,page)
+
     if (resultado !== null) {
-      setRecolecciones(resultado)
+
+      setRecolecciones(resultado.data)
+      setCurrentPage(resultado.currentPage)
+      setTake(take)
+      setCount(resultado.count)
+
     }
   }
-
+  const pagination=(page:number)=>{
+    console.log(page)
+  }
   const currencyFormatter = (value: string) => {
     const valor = Number(value)
     const formatter = new Intl.NumberFormat('es-GT', {
@@ -241,7 +254,7 @@ const Home = () => {
 
   const actualizarRecoleccion = async (id: number, recoleccion: IRecoleccion) => {
     try {
-      console.log(`estado ${recoleccion.estado}`)
+
       const respuesta = await api_updateRecoleccion(id, recoleccion);
 
 
@@ -321,7 +334,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    obtenerRecolecciones();
+    obtenerRecolecciones(4,1);
     const listarEmpleados = async () => {
       const data = await api_getEmpleados();
       setEmpleados(data);
@@ -333,23 +346,23 @@ const Home = () => {
     <>
       <div className="container-fluid">
 
-        <p className="text-center h1 mt-2">Listado de recoleccion y entrega de paquetes</p>
+        <p className="text-center h1 mt-2">Listado de entrega de paquetes</p>
 
-        <h6>Muesta los datos </h6>
-        <table className="table">
-          <thead>
+        <h6>Muestra los datos </h6>
+        <Table striped bordered hover>
+          <thead >
             <tr>
-              <th scope="col">#</th>
-              <th scope="col"> Cliente Envia</th>
-              <div className="vr"></div>
+              <th >#</th>
+              <th   > Cliente Envia</th>
+              
               <th scope="col">Persona Recibe</th>
               <th scope="col">Direccion Persona Recibe</th>
               <th scope="col">Municipio</th>
-              <div className="vr"></div>
+          
               <th scope="col">Forma de Pago</th>
               <th scope="col">$ Monto Cobrar</th>
               <th scope="col">$ Precio Envio</th>
-              <div className="vr"></div>
+          
 
               <th scope="col">Fecha </th>
               <th scope="col">Estado</th>
@@ -357,62 +370,79 @@ const Home = () => {
               <th scope="col">Operacion</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{fontSize:14}}>
             {recolecciones && recolecciones.length > 0}
             
             {recolecciones.map((m, i) => {
               return (
                 <tr key={m.id}>
-                  <th scope="row">{i + 1}</th>
+                  <td >{i + 1}</td>
                   <td>{m.clienteEnvia.nombre + ' ' + m.clienteEnvia.apellido}</td>
-                  <td className="vr"></td>
+                
                   <td>{m.nombreRecibe + ' ' + m.apellidoRecibe}</td>
                   <td>{m.direccionEntrega}</td>
                   <td>{m.municipioRecibe.nombre}</td>
-                  <td className="vr"></td>
+              
                   <td>{m.tipoPago}</td>
                   <td>{currencyFormatter(m.totalCobrar.toString())} </td>
                   <td>{currencyFormatter(m.precioEnvio.toString())}
                   </td>
-                  <td className="vr"></td>
+                
 
                   <td>{dateFormatter(m.fechaCreacion)}
 
                   </td>
 
-                  <td>{m.estado}</td>
+                  <td >{m.estado}</td>
                   <td>{m.empleadoAsignado.nombre + ' ' + m.empleadoAsignado.apellido}</td>
 
                   <td>
-
-                    <div className='mb-1'>       <button className={`btn btn-warning ${m.estado === ESTATUSRECOLECCION.ENTREGADA && 'disabled'}  `}
+                    <div className="row">
+                      <div className="col-6"> <div className='mb-1'>       <button className={`btn btn-warning ${m.estado === ESTATUSRECOLECCION.ENTREGADA && 'enable'}  `}
                       onClick={() => handlerEditButton(m)}
-
+                
                       data-bs-toggle="modal"
                       data-bs-target="#modalUpdateRecoleccion"
                     >
-                      <i className="bi bi-card-list " ></i>
-                    </button></div>
-
-                    <div>
+                      <i className="bi bi-card-list " style={{fontSize:8}}></i>
+                    </button></div></div>
+                      <div className="col">
+                      <div>
                       <button className={`btn btn-danger ${m.estado !== ESTATUSRECOLECCION.CREADA && 'disabled'}  `}
                         onClick={() => handlerDeleteButton(m.id)}
 
                         data-bs-toggle="modal"
                         data-bs-target="#modalDialog"
                       >
-                        <i className="bi bi-trash3"></i>
+                        <i className="bi bi-trash3" style={{fontSize:8}} ></i>
                       </button></div>
+                      </div>
+                    </div>
+
+                   
+
+                    
 
                   </td>
                 </tr>)
             })}
             
-            
+           
 
 
           </tbody>
-        </table>
+        </Table>
+        {(recolecciones && recolecciones.length > 2 ) ? 
+        <nav aria-label="...">
+            <Pagination
+             currentPage={currentPage}
+             count={count}
+             take={take}
+            onPageChange={(currentPage) => setCurrentPage(currentPage)}
+      />
+</nav>  :""
+        }
+      
       </div>
       <ConfirmDialog mensaje={mensajeConfirmacion} handlerConfirmacion={handlerConfirmacion} idModal={idModal}></ConfirmDialog>
       <DetalleRecoleccion

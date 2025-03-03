@@ -16,31 +16,8 @@ import { IEmpleado } from '../interfaces/IEmpleado'
 import { IMunicipio } from '../interfaces/iMunicipio'
 import Direccion from '../cliente/direccion/Direccion'
 import { useMunicipios } from '../hooks/useMunicipios'
+import { clienteInit } from '../interfaces/ObjectosdeInicio/InterfacesdeInicio'
 
-const init: ICliente = {
-    id: 0,
-    codigoCliente: '',
-    nombre: '',
-    apellido: '',
-    nombrePagina: '',
-    telefono: '',
-    estado: false,
-    direcciones: [
-        {
-            id: 0,
-            direccionCompleta: '',
-            calle: 0,
-            avenida: 0,
-            zona: 0,
-            tipoDireccion: ETipoDireccion.PRINCIPAL,
-            municipio: {
-                id: 0,
-                nombre: ''
-            }
-        }
-    ],
-    cuentas: []
-}
 const initEmpleado: IEmpleado = {
     id: 0,
     codigoEmpleado: '',
@@ -91,7 +68,7 @@ const Recoleccion = () => {
     const [clase, setClase] = useState('')
     const { municipios } = useMunicipios()
     const [clientes, setCliente] = useState<ICliente[]>([])
-    const [envia, setEnvia] = useState<ICliente>(init)
+    const [envia, setEnvia] = useState<ICliente>(clienteInit)
     const [recolecion, setRecoleccion] = useState<IRecoleccionEntrega>(recoleccionEntrega)
     const [disableInputoCostoPRoducto, setdisableCostoPRoducto] = useState(false);
     const [empleados,setEmpleados]=useState<IEmpleado[]>([initEmpleado]);
@@ -102,7 +79,7 @@ const Recoleccion = () => {
         const d = clientes[0].direcciones.filter(d => d.tipoDireccion === ETipoDireccion.PRINCIPAL)
         if (c.length === 0) {
 
-            setEnvia(init)
+            setEnvia(clienteInit)
         } else {
     
        
@@ -292,6 +269,7 @@ const Recoleccion = () => {
 
         const listarCliente = async () => {
             const data = await api_getClientes()
+            console.log(data)
             setCliente(data)
         }
         listarCliente()

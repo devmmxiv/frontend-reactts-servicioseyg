@@ -66,7 +66,7 @@ const Cliente = () => {
       const b=cliente.apellido.split(" ");
       const apellido=b[0];
       const username=a+apellido;
-
+      setCliente({...cliente,})
       const respuser=await api_newUser(userLogin.token,username.toLowerCase())
       if(respuser?.status){
         const resp = await api_createCliente(cliente);
@@ -227,7 +227,7 @@ const Cliente = () => {
   }
   return (
     <>
-      <div className="container mt-4">
+      <div className="flex-container mt-4">
         <div className="row">
           <div className="col-lg-12">
    

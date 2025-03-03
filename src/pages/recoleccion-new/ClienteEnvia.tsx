@@ -6,7 +6,8 @@ interface props{
   cliente:ICliente
 }
 
-const PersonaEnvia = ({cliente}:props) => {
+const ClienteEnvia = () => {
+  const {envia:cliente}=useCrudRecoleccion()
 
   return (
     <div>
@@ -27,4 +28,4 @@ const PersonaEnvia = ({cliente}:props) => {
   )
 }
 
-export default PersonaEnvia
+export default ClienteEnvia

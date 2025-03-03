@@ -13,3 +13,7 @@ export interface ICliente{
     direcciones:IDireccion[];
     cuentas:ICuentaBancaria[];
 }
+export interface IClienteEnvia{
+    id:number;
+ 
+}

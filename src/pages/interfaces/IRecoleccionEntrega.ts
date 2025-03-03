@@ -1,4 +1,4 @@
-import { ICliente } from "./ICliente";
+import { ICliente, IClienteEnvia } from "./ICliente";
 import { IDireccion } from "./IDireccion";
 import { IEmpleado } from "./IEmpleado";
 import { IMunicipio } from "./iMunicipio";
@@ -51,6 +51,7 @@ export interface IRecoleccion {
     fechaRecoleccion?:Date;
     fechaEntrega?:Date;
 }
+
 export interface IRecoleccionResumenCierre {
 
     estado: ESTATUSRECOLECCION;
@@ -77,5 +78,30 @@ export enum TIPOPAGO {
     TARJETA = 'TARJETA',
     YAPAGADO = 'YA PAGADO',
 
+
+}
+
+export interface IEntrega {
+    id: number;
+    clienteEnvia: IClienteEnvia;
+
+    nombreRecibe: string;
+    apellidoRecibe: string;
+    telefonoRecibe: string;
+   // precioProducto: string;
+    precioEnvio: string;
+    direccionEntrega: string;
+    zonaEntrega:number,
+    estado: ESTATUSRECOLECCION;
+    tipoPago: TIPOPAGO;
+    municipioRecibe: IMunicipio;
+    totalCobrar: string;
+    fechaCreacion: Date;
+    isCerrada:boolean;
+   // clienteRecibePagaEnvio?:boolean;
+
+    empleadoAsignado:IEmpleado;
+    fechaRecoleccion?:Date;
+    fechaEntrega?:Date;
 
 }
