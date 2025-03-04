@@ -65,7 +65,7 @@ const Home = () => {
   const [empleados, setEmpleados] = useState<IEmpleado[]>([initEmpleado]);
   const [currentPage,setCurrentPage]=useState(0)
   const [count,setCount]=useState(0)
-  const [take,setTake]=useState(0)
+  const [take,setTake]=useState(100)
   const [busqueda,setBusqueda]=useState("");
   const obtenerRecolecciones = async (take:number,page:number=1) => {
     const resultado = await api_getRecoleccionPagination(take,page)
@@ -80,7 +80,8 @@ const Home = () => {
     }
   }
   const pagination=(page:number)=>{
-    console.log(page)
+   
+    obtenerRecolecciones(take,page);
   }
   const currencyFormatter = (value: string) => {
     const valor = Number(value)
@@ -358,7 +359,7 @@ const Home = () => {
 
   }
   useEffect(() => {
-    obtenerRecolecciones(4,1);
+    obtenerRecolecciones(take,1);
     const listarEmpleados = async () => {
       const data = await api_getEmpleados();
       setEmpleados(data);
@@ -483,13 +484,13 @@ const Home = () => {
 
           </tbody>
         </Table>
-        {(recolecciones && recolecciones.length > 2 ) ? 
+        {(recolecciones && recolecciones.length > 100 ) ? 
         <nav aria-label="...">
             <Pagination
              currentPage={currentPage}
              count={count}
              take={take}
-            onPageChange={(currentPage) => setCurrentPage(currentPage)}
+            onPageChange={pagination}
       />
 </nav>  :""
         }

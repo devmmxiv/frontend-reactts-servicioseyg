@@ -15,7 +15,7 @@ const ModalRecoleccion1 = ({show,hideModal}:props) => {
     
     const { mensajeros } = useEmpleados()
     const { municipios } = useMunicipios()
-    const { envia, entrega: recoleccion, onChange, handleRecoleccion, onSelect } = useCrudRecoleccion()
+    const { envia, entrega: recoleccion, onChange, handleRecoleccion,handleLimpiarEntrega, onSelect } = useCrudRecoleccion()
     const [showAlert, setShowAlert] = useState(false)
     const [mensajeAlerta, setMensajeAlerta] = useState('')
 
@@ -50,6 +50,7 @@ const ModalRecoleccion1 = ({show,hideModal}:props) => {
             return
         }
          handleRecoleccion(recoleccion)
+         handleLimpiarEntrega()
         hideModal();
         
        
