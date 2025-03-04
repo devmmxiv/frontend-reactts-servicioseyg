@@ -27,7 +27,7 @@ export const api_createCliente = async (client:ICliente) => {
         console.log("Erron en fetch",error)
     }
   };
-  export const api_updateCliente = async (client:ICliente) => {
+  export const api_updateCliente = async (id: number, client: ICliente) => {
     try{
        
         const resp = await fetch(`${API}/cliente`, {
@@ -61,7 +61,7 @@ export const api_createCliente = async (client:ICliente) => {
             const data = await resp.json().catch((error) => {
                 console.log("error en fetch data", error);
             });
-            console.log(data)
+          
             return data;
         } else {
             return resp;
@@ -114,3 +114,24 @@ export const getMunicipios = async () => {
         console.log("Erron en fetch", error)
     }
 };
+  export const api_deleteCliente = async (id: number) => {
+    try{
+  
+        const resp = await fetch(`${API}/cliente/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        
+        },
+        
+      });
+      const data = await resp.json().catch((error) => {
+        console.log("error en fetch data", error);
+      });
+      return resp;
+    
+    }catch(error){
+        console.log("Erron en fetch",error)
+    }
+  };

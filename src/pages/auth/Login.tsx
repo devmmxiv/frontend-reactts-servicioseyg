@@ -16,8 +16,8 @@ const [clase,setClase]=useState("warning")
 const toggle=()=>{
   setShow(!show);
 }
-  const  handleSubmit=()=> {
- 
+  const  handleSubmit=(e: React.FormEvent<HTMLFormElement>)=> {
+    e.preventDefault();
     if(usuario=="" || passwd==""){
  
       setShow(true);
@@ -81,8 +81,8 @@ const toggle=()=>{
                
                 <div className="col-12">
                   <div className="d-grid">
-                    <button className="btn bsb-btn-xl btn-primary" type="button"
-                    onClick={()=>{handleSubmit()}}
+                    <button className="btn bsb-btn-xl btn-primary" type="submit"
+                    
                     >Ingresar</button>
                   </div>
                 </div>

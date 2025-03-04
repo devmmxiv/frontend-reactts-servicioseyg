@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 
-import { get_reporte, get_reporteMenusal } from '../api/api_reportes/apiReporte'
+import { get_reporte, get_reportecierreempleado, get_reporteMenusal } from '../api/api_reportes/apiReporte'
 import { get_cierres } from '../api/api_cierre/api_cierre'
 import SelectSearchCierres from '../shared/select/SelectCierres';
 import { ICierre } from '../interfaces/ICierre';
@@ -12,6 +12,8 @@ import SelectClientes from '../shared/select/SelectClientes';
 import { api_getClientes } from '../api/api_cliente/apiclientes';
 import FechaPicker from '../shared/datePicker/FechaPicker';
 import { dateToString } from '../../utils/utilidades';
+import { IEmpleado } from '../interfaces/IEmpleado';
+import { api_getEmpleados } from '../api/api_empleado/apiempleado';
 
 
 
@@ -25,13 +27,14 @@ const Reporte = () => {
   const [idCliente, setIdCliente] = useState<number>(0)
   const [idClienteMes, setIdClientMes] = useState<number>(0)
   const [show, setShow] = useState(false)
-
-
+  const [empleados,setEmpleados]=useState<IEmpleado[]>([])
+  const [idEmpleado,setIdEmplado]=useState<number>(0)
   const [url, setUrl] = useState('http:localhost:3000')
   const [disable, setDisable] = useState(true)
   const [fechaInicio,setFechaInicio]=useState(new Date());
   const [fechaFin,setFechaFin]=useState(new Date());
   const [titulo,setTitulo]=useState("");
+
   const data = async (idCierre: number, idCliente: number) => {
     const resp = await get_reporte(idCierre, idCliente);
 
@@ -40,7 +43,7 @@ const Reporte = () => {
       const data = await resp.arrayBuffer()
       const blob = new Blob([data], { type: 'application/pdf' })
       const url = URL.createObjectURL(blob)
-     
+      console.log(url)
       setUrl(url)
       setShow(true)
   
@@ -48,7 +51,22 @@ const Reporte = () => {
       setShow(false)
     }
   }
+  const dataEmpleados = async (idCierre: number, idEmpleado: number) => {
+    const resp = await get_reportecierreempleado(idCierre, idEmpleado);
 
+    if (resp?.status === 200) {
+
+      const data = await resp.arrayBuffer()
+      const blob = new Blob([data], { type: 'application/pdf' })
+      const url = URL.createObjectURL(blob)
+      console.log(url)
+      setUrl(url)
+      setShow(true)
+  
+    } else {
+      setShow(false)
+    }
+  }
   const dataReporteClienteMensual = async (idCliente: number,fecha:string) => {
     const resp = await get_reporteMenusal(idCliente, fecha);
 
@@ -72,6 +90,14 @@ const Reporte = () => {
     if (idCierre > 0) {
       setTitulo("Reporte de Cierre de Recolecciones")
       data(idCierre, idCliente)
+    }
+  }
+  const onClickEmpleado = () => {
+ 
+  
+    if (idCierre > 0) {
+      setTitulo("Reporte de Cierre de Por Mensajero")
+      dataEmpleados(idCierre, idEmpleado)
     }
   }
   const onClickReporteMensual = () => {
@@ -111,6 +137,15 @@ const Reporte = () => {
 
     }
   }
+  const handleSelectEmpleado = (label?: string, value?: number) => {
+    if (value === undefined) {
+      setIdEmplado(0)
+
+    } else {
+      setIdEmplado(value)
+
+    }
+  }
   const handleSelectClienteMes = (label?: string, value?: number) => {
     console.log(`valor id cliente ${value}`)
     if (value === undefined) {
@@ -146,6 +181,10 @@ const Reporte = () => {
     setClientes(data)
 
   }
+  const listarEmpleados=async ()=>{
+    const data = await api_getEmpleados();
+    setEmpleados(data);
+  }
   const listarTodoslosCliente = async () => {
     const data = await api_getClientes();
     setClientes2(data);
@@ -153,13 +192,14 @@ const Reporte = () => {
   useEffect(() => {
     listarTodoslosCliente();
     listCierres();
+    listarEmpleados();
     setShow(false)
   }, [])
   return (
     <div>
-
-
-      <div className="card m-1" style={{ width: '50rem' }}>
+<div className="row">
+  <div className="col">
+  <div className="card m-1" style={{ width: '50rem' }}>
         <div className="card-body p-0">
           <div className="pane py-2 px-3 border-bottom">
             <div>
@@ -210,6 +250,54 @@ const Reporte = () => {
         <div className="card-body p-0">
           <div className="pane py-2 px-3 border-bottom">
             <div>
+              <h2 className="card-title mb-3 mt-0 lead">Reportes de cierre por Mensajero</h2>
+              <p className="text-muted">
+                Seleccion el id del cierre. Puede generar el reporte con datos de un Mensajero
+              </p>
+            </div>
+          </div>
+          <div className="pane py-2 px-3 border-bottom">
+
+
+            <SelectSearchCierres cierres={cierres} handleSelect={handleSelect}></SelectSearchCierres>
+            <div className="input-group mb-3" >
+              <span className="input-group-text">Mensajero</span>
+              <select className="form-select" aria-label="Default select example" name='empleadoRecolecta'
+                onChange={(e) => handleSelectEmpleado('', Number(e.target.value))}
+                value={idEmpleado}
+              ><option value={0}>{'Todos '}</option>
+                {empleados.map((e) => {
+                  return (
+                    <option value={e.id}>{e.nombre + ' ' + e.apellido}</option>
+                  )
+                })}
+
+
+              </select>
+
+            </div>
+
+            <ModalReporte show={show} url={url} titulo={titulo} idModal='modalReporteEmpleado'></ModalReporte>
+          </div>
+          <div className="pane py-2 px-3">
+            <div>
+              <button
+                className="btn btn-flat btn-sm btn-outline-danger ms-auto m-1"
+                data-bs-toggle="modal"
+                data-bs-target="#modalReporteEmpleado"
+                onClick={onClickEmpleado}
+                disabled={disable}
+              >Generar Reporte  Por Mensajero</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div className="col">
+  <div className="card m-1" style={{ width: '50rem' }}>
+        <div className="card-body p-0">
+          <div className="pane py-2 px-3 border-bottom">
+            <div>
               <h2 className="card-title mb-3 mt-0 lead">Reporte para cobros  de Envios por Mes y Cliente</h2>
               <p className="text-muted">
                 Seleccione el cliente y el mes del reporte
@@ -236,6 +324,11 @@ const Reporte = () => {
           </div>
         </div>
       </div>
+  </div>
+</div>
+      
+      <br></br>
+   
     </div>
 
   )

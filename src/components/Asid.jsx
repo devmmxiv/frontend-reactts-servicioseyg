@@ -21,7 +21,7 @@ const Asid = () => {
             <i className="bi bi-box-fill me-2 " aria-hidden="true"></i>Crear Recoleccion
             </NavLink>*/}
           
-            <NavLink to="/recoleccionn" 
+            <NavLink to="/recoleccion" 
             className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
             <i className="bi bi-box-fill me-2 " aria-hidden="true"></i>Crear Recoleccion
             </NavLink>

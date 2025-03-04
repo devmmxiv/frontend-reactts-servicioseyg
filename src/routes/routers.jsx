@@ -28,10 +28,11 @@ const MisRutas = () => {
       >
        
         <Route path="/home" exact={true} Component={Home}></Route>
-        <Route path="/cliente" exact={true} Component={Cliente}></Route>
-        <Route path="/recoleccion" exact={true} Component={Recoleccion}></Route>
+        <Route path="/cliente" exact={true} Component={
+          Cliente}></Route>
+        <Route path="/recoleccion" exact={true} Component={RecoleccionN}></Route>
 
-        <Route path="/recoleccionn" exact={true} Component={RecoleccionN}></Route>
+        
         <Route path="/proceso" exact={true} Component={Proceso}></Route>
         <Route path="/reportes" exact={true} Component={Reporte}></Route>
       </Route>

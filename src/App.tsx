@@ -11,7 +11,8 @@ import { useContext } from 'react';
 import LoginContext from './context/LoginContext';
 import { useLogin } from './pages/hooks/useLogin';
 import { PerfilProvider } from './context/PerfilContext';
-import { CrudClienteProvider } from './context/CrudRecoleccionContext';
+import {  CrudRecoleccionProvider } from './context/CrudRecoleccionContext';
+import { CrudClienteProvider } from './context/CrudClientesContext';
 
 
 function App() {
@@ -27,11 +28,11 @@ function App() {
         <PerfilProvider><NavBar></NavBar></PerfilProvider>
           <div className='flex'>
             <Asid></Asid>        
-            <CrudClienteProvider>
-          
-              <Content></Content>
+            <CrudRecoleccionProvider>
+          <CrudClienteProvider><Content></Content></CrudClienteProvider>
            
-              </CrudClienteProvider>
+           
+              </CrudRecoleccionProvider>
  
 
           </div>

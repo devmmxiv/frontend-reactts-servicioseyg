@@ -144,7 +144,7 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
                                 >
                                     {empleados.map((e) => {
                                         return (
-                                            <option value={e.id}>{e.nombre + ' ' + e.apellido}</option>
+                                            <option key={e.id} value={e.id}>{e.nombre + ' ' + e.apellido}</option>
                                         )
                                     })}
 

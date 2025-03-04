@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import ModalCliente from "./Modal_Cliente"
 import { IDireccion, ETipoDireccion } from "../interfaces/IDireccion"
 import { ICliente } from "../interfaces/ICliente"
@@ -8,6 +8,9 @@ import { api_createCliente, api_getClientes, api_updateCliente } from '../api/ap
 import * as f from './functions'
 import { api_newUser } from "../api/api_user/apiUser"
 import { useLogin } from "../hooks/useLogin"
+import TableCliente from "./TableCliente"
+import { useCliente } from "../hooks/useCliente"
+import { CrudClienteProvider } from "../../context/CrudClientesContext"
 
 
 
@@ -29,17 +32,16 @@ const initCliente: ICliente = {
 
 
 const Cliente = () => {
-  const [status,setStatus]=useState(false)
-  const [clientes, setClientes] = useState<ICliente[]>([])
+ 
+  const [listaClientes, setListaClientes] = useState<ICliente[]>([])
+  const [temporalClientes, setTemporalClientes] = useState<ICliente[]>([])
   const [cliente, setCliente] = useState<ICliente>(initCliente)
   const [update, setUpdate] = useState(false)
+  const [busqueda, setBusqueda] = useState("");
 
-  //alerta
-  const [show, setShow] = useState(false)
-  const [mensaje, setMensaje] = useState('')
 
-  const{userLogin}=useLogin()
-
+  const { userLogin } = useLogin()
+  const {clientes }=useCliente();
 
 
 
@@ -51,34 +53,32 @@ const Cliente = () => {
       setCliente(initCliente)
     }
     setUpdate(opcion);
-   
-  }
-  const close=()=>{
-    console.log('se agrega un evento al boton cerrar')
+
   }
 
+
   const onSaveChanges = async () => {
-   
+
     if (!update) {
       //primero creamos el usaurio
-    
-      const a=cliente.nombre.charAt(0);
-      const b=cliente.apellido.split(" ");
-      const apellido=b[0];
-      const username=a+apellido;
-      setCliente({...cliente,})
-      const respuser=await api_newUser(userLogin.token,username.toLowerCase())
-      if(respuser?.status){
+
+      const a = cliente.nombre.charAt(0);
+      const b = cliente.apellido.split(" ");
+      const apellido = b[0];
+      const username = a + apellido;
+      setCliente({ ...cliente, })
+      const respuser = await api_newUser(userLogin.token, username.toLowerCase())
+      if (respuser?.status) {
         const resp = await api_createCliente(cliente);
         f.alerta('Cliente Creado con Exito')
         setCliente(initCliente)
-      }else{
+      } else {
         f.alerta('No se pudo crear el cliente')
       }
 
     } else {
- 
-      const resp = await api_updateCliente(cliente);
+
+      const resp = await api_updateCliente(cliente.id, cliente);
       f.alerta('Cliente Actualizado con Exito')
       setCliente(initCliente)
     }
@@ -210,27 +210,50 @@ const Cliente = () => {
   }
   /****************************************/
   const listarClientes = async () => {
-    const data = await api_getClientes();
+ 
+    setListaClientes(clientes);
+   // setTemporalClientes(clientes)
+  
+  }
+  const filtro = () => {
 
-    setClientes(data)
+    const filtroClientes = temporalClientes.filter(
+      c => {
+        return (
+          c
+            .nombre
+            .toLowerCase()
+            .includes(busqueda.toLowerCase()) ||
+          c
+            .apellido
+            .toLowerCase()
+            .includes(busqueda.toLowerCase())
+        );
+      }
+    );
+
+    if (busqueda.length == 0) {
+      setListaClientes(clientes);
+    } else {
+
+      setListaClientes(filtroClientes);
+    }
+
   }
   useEffect(() => {
 
-
     listarClientes()
-  }, [])
 
-  //test modaltest
-  const [showTest,setShowTest]=useState(false)
-  const toogleTest=()=>{
-    setShowTest(!showTest)
-  }
+  }, [clientes])
+
+
+
   return (
     <>
       <div className="flex-container mt-4">
         <div className="row">
           <div className="col-lg-12">
-   
+
             <div className="card">
               <div className="card-header">
                 <p className="text-center h1 mt-2">Catalogo de Clientes</p>
@@ -238,7 +261,7 @@ const Cliente = () => {
                   <div className="col-md-4">
 
                     <button
-                     name="btnAgregar"
+                      name="btnAgregar"
                       onClick={(e) => onClickeAgregar(initCliente, false)}
                       className="btn btn-success"
                       data-bs-toggle="modal" data-bs-target="#clienteModal"
@@ -255,7 +278,44 @@ const Cliente = () => {
               </div>
               <div className="card-body">
                 <h6 className="card-subtitle mb-2 text-body-secondary"></h6>
-                <table className="table  table-striped table-hover caption-top">
+                <div>
+                  <div className="row">
+                    <div className="col">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Busqueda</span>
+                        <input type="text" id="firstname" aria-label="First name"
+                          value={busqueda}
+                          name='nombre'
+                          className="form-control"
+                          onChange={(e) => setBusqueda(e.target.value)}
+                        />
+                        <button
+                          className="btn btn-warning"
+                          style={{ marginRight: 5 }}
+
+
+                          onClick={(e) => filtro()}
+
+                        >
+                          <i className="bi bi-pencil-square">Buscar</i>
+                        </button>
+
+                      </div>
+                    </div>
+                    <div className="col">
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+                
+            
+              <TableCliente clientes={listaClientes}></TableCliente>
+          
+                
+                {/**  <table className="table  table-striped table-hover caption-top">
                   <caption>Listado de Clientes</caption>
                   <thead>
                     <tr>
@@ -346,7 +406,7 @@ const Cliente = () => {
 
 
                   </tbody>
-                </table>
+                </table>*/}
               </div>
             </div>
 
@@ -355,9 +415,9 @@ const Cliente = () => {
       </div>
 
 
-      <ModalCliente  
+      <ModalCliente
 
-      cliente={cliente} update={update} onChange={onChange}
+        cliente={cliente} update={update} onChange={onChange}
         ManejadorCuenta={ManejadorCuentas}
         ManejadorDirecciones={ManejadorDirecciones}
         onSaveChanges={onSaveChanges}

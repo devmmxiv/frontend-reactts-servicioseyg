@@ -13,7 +13,7 @@ interface props {
 }
 const ModalReporte = ({ show ,url,titulo,idModal}: props) => {
       const defaultLayoutPluginInstance = defaultLayoutPlugin();
-   console.log(`show ${show}`)
+
     return (
         <div >
 

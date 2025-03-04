@@ -59,18 +59,19 @@ const Home = () => {
   const [idModal, setIdModal] = useState('')
   const [estado, setEstado] = useState<ESTATUSRECOLECCION>(ESTATUSRECOLECCION.CREADA)
   const [recolecciones, setRecolecciones] = useState<IRecoleccion[]>([])
+  const [temporalRecolecciones, setTemporalRecolecciones] = useState<IRecoleccion[]>([])
   const [recoleccion, setRecoleccion] = useState<IRecoleccion>(init)
   const [disableInputoCostoPRoducto, setdisableCostoPRoducto] = useState(false);
   const [empleados, setEmpleados] = useState<IEmpleado[]>([initEmpleado]);
   const [currentPage,setCurrentPage]=useState(0)
   const [count,setCount]=useState(0)
   const [take,setTake]=useState(0)
-
+  const [busqueda,setBusqueda]=useState("");
   const obtenerRecolecciones = async (take:number,page:number=1) => {
     const resultado = await api_getRecoleccionPagination(take,page)
 
     if (resultado !== null) {
-
+      setTemporalRecolecciones(resultado.data);
       setRecolecciones(resultado.data)
       setCurrentPage(resultado.currentPage)
       setTake(take)
@@ -332,7 +333,30 @@ const Home = () => {
 
     }
   }
+  const filtro = () => {
 
+    const filtroRecolecciones = temporalRecolecciones.filter(
+      c => {
+        return (
+          c.empleadoAsignado.nombre!
+            .toLowerCase()
+            .includes(busqueda.toLowerCase()) ||
+          c
+            .empleadoAsignado.apellido!
+            .toLowerCase()
+            .includes(busqueda.toLowerCase())
+        );
+      }
+    );
+
+    if (busqueda.length == 0) {
+      setRecolecciones(temporalRecolecciones);
+    } else {
+
+      setRecolecciones(filtroRecolecciones);
+    }
+
+  }
   useEffect(() => {
     obtenerRecolecciones(4,1);
     const listarEmpleados = async () => {
@@ -347,7 +371,34 @@ const Home = () => {
       <div className="container-fluid">
 
         <p className="text-center h1 mt-2">Listado de entrega de paquetes</p>
+        <div className="row">
+                    <div className="col">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Buscar por mensajero</span>
+                        <input type="text" id="firstname" aria-label="First name"
+                          value={busqueda}
+                          name='nombre'
+                          className="form-control"
+                          onChange={(e) => setBusqueda(e.target.value)}
+                        />
+                        <button
+                          className="btn btn-warning"
+                          style={{ marginRight: 5 }}
 
+
+                          onClick={(e) => filtro()}
+
+                        >
+                          <i className="bi bi-pencil-square">Buscar</i>
+                        </button>
+
+                      </div>
+                    </div>
+                    <div className="col">
+
+                    </div>
+
+                  </div>
         <h6>Muestra los datos </h6>
         <Table striped bordered hover>
           <thead >

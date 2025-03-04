@@ -1,10 +1,10 @@
-import { create } from "domain";
+
 import { createContext, useEffect, useState } from "react";
 import { api_getClientes } from "../pages/api/api_cliente/apiclientes";
 import { ICliente } from "../pages/interfaces/ICliente";
-import { clienteInit, entregaInit, recoleccionInit } from "../pages/interfaces/ObjectosdeInicio/InterfacesdeInicio";
+import { clienteInit, entregaInit } from "../pages/interfaces/ObjectosdeInicio/InterfacesdeInicio";
 import { ETipoDireccion } from "../pages/interfaces/IDireccion";
-import { ESTATUSRECOLECCION, IEntrega, IRecoleccion, IRecoleccionEntrega, TIPOPAGO } from "../pages/interfaces/IRecoleccionEntrega";
+import { ESTATUSRECOLECCION, IEntrega, TIPOPAGO } from "../pages/interfaces/IRecoleccionEntrega";
 import { api_deleteRecoleccion, api_getRecoleccionByClient, api_recoleccion, api_recoleccionEntrega, api_updateEntrega, api_updateRecoleccion } from "../pages/api/api_recoleccion/api_recoleccionentrega";
 import { IMunicipio } from "../pages/interfaces/iMunicipio";
 import { IEmpleado } from "../pages/interfaces/IEmpleado";
@@ -28,7 +28,7 @@ interface props {
     children: JSX.Element | JSX.Element[]
 }
 const CrudRecoleccionContext = createContext<CrudRecoleccionContextProps>({} as CrudRecoleccionContextProps);
-const CrudClienteProvider = ({ children }: props) => {
+const CrudRecoleccionProvider = ({ children }: props) => {
     const [entrega, setEntrega] = useState<IEntrega>(entregaInit)
     const [entregas, setEntregas] = useState<IEntrega[]>([])
     const [clientes, setClientes] = useState<ICliente[]>([])
@@ -250,5 +250,5 @@ const CrudClienteProvider = ({ children }: props) => {
         <CrudRecoleccionContext.Provider value={data}>{children}</CrudRecoleccionContext.Provider>
     )
 }
-export { CrudClienteProvider }
+export { CrudRecoleccionProvider }
 export default CrudRecoleccionContext;
