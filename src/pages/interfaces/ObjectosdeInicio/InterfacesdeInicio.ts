@@ -66,7 +66,7 @@ export const recoleccionInit: IRecoleccion = {
   //precioProducto: "",
   //costoEnvio: "",
   direccionEntrega: "",
-  zona: 1,
+  zonaEntrega: 1,
   estado: ESTATUSRECOLECCION.CREADA,
   tipoPago: TIPOPAGO.EFECTIVO,
   municipioRecibe: {

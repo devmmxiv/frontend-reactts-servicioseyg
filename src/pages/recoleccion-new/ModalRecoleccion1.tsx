@@ -26,7 +26,9 @@ const ModalRecoleccion1 = ({show,hideModal}:props) => {
     const cerrarModal=()=>{
       setShowAlert(false);
       hideModal();
+      handleLimpiarEntrega();
     }
+
     /**funciones */
     const onSave = () => {
        if (recoleccion.nombreRecibe.trim() === '' || recoleccion.apellidoRecibe.trim() === '' || recoleccion.telefonoRecibe.trim() === '') {
@@ -227,10 +229,8 @@ const ModalRecoleccion1 = ({show,hideModal}:props) => {
                                         ) : (
                                             <button type="button" className="btn btn-primary"
 
-                                            data-bs-target='#modalDialog' 
-              
-                                            data-bs-toggle="modal"
-       
+                                           
+                                            onClick={() => onSave()}
                                           
                                             >Actualizar</button>
                                         )

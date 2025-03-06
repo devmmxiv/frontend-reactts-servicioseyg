@@ -39,7 +39,7 @@ const init: IRecoleccion = {
   //precioProducto: "",
   //costoEnvio: "",
   direccionEntrega: "",
-  zona: 1,
+  zonaEntrega: 1,
   estado: ESTATUSRECOLECCION.CREADA,
   tipoPago: TIPOPAGO.EFECTIVO,
   municipioRecibe: {
@@ -114,7 +114,7 @@ const Home = () => {
     setId(id)
   }
   const handlerEditButton = (r: IRecoleccion) => {
-
+console.log("recoleccion a actualizar",r)
     setRecoleccion(r)
   }
 
@@ -237,13 +237,13 @@ const Home = () => {
             totalCobrar: recoleccion.totalCobrar,
             precioEnvio: recoleccion.precioEnvio,
             // costoEnvio: recoleccion.costoEnvio
-            zona: recoleccion.zona,
+            zonaEntrega: recoleccion.zonaEntrega,
             estado: recoleccion.estado,
             empleadoAsignado: recoleccion.empleadoAsignado
           }
 
         }
-
+ 
         return d;
       });
 
@@ -258,7 +258,7 @@ const Home = () => {
     try {
 
       const respuesta = await api_updateRecoleccion(id, recoleccion);
-
+     
 
     } catch (error) {
       f.mensaje("No se pudo actualizar el estado de la recoleccion " + error)
@@ -366,7 +366,7 @@ const Home = () => {
     }
     listarEmpleados();
 
-  }, [])
+  }, [recolecciones])
   return (
     <>
       <div className="container-fluid">

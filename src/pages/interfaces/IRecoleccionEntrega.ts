@@ -37,7 +37,7 @@ export interface IRecoleccion {
    // precioProducto: string;
    precioEnvio: string;
     direccionEntrega: string;
-    zona:number,
+    zonaEntrega:number,
     estado: ESTATUSRECOLECCION;
     tipoPago: TIPOPAGO;
     municipioRecibe: IMunicipio;

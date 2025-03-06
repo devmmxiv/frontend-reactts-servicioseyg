@@ -73,8 +73,8 @@ const DetalleRecoleccion = ({ recoleccion, updateRecoleccion, onChange, onSelect
                             <div className="input-group mb-3">
                                 <span className="input-group-text"><i className="bi bi-signpost p-1"></i>Zona</span>
                                 <input type="number" id="zona" aria-label="address"
-                                    value={recoleccion.zona}
-                                    name='zona'
+                                    value={recoleccion.zonaEntrega}
+                                    name='zonaEntrega'
                                     className="form-control"
                                     onChange={(e) => onChange(e)}
                                 />

@@ -196,7 +196,7 @@ const CrudRecoleccionProvider = ({ children }: props) => {
 
     }
     const handleUpdate = (entrega: IEntrega) => {
-
+        console.log("entraga a actualizar",entrega)
         setEntrega(entrega);
     }
     const handleElimina = async (id: number) => {

@@ -11,7 +11,7 @@ import ModalRecoleccion1 from './ModalRecoleccion1'
 
 const RecoleccionN = () => {
   const [show,setShow]=useState(false);
-  const { envia, handleInicia,handleLimpiarEntrega } = useCrudRecoleccion()
+  const { envia, handleInicia } = useCrudRecoleccion()
 
   const openModal=()=>{
   
@@ -57,7 +57,7 @@ const RecoleccionN = () => {
               <div className="card-body">
                 {envia.id > 0 && (
 
-                  <ListadoRecolecciones           
+                  <ListadoRecolecciones      openModal={openModal}     
                   ></ListadoRecolecciones>
                 )}
               </div>

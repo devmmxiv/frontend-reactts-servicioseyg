@@ -1,15 +1,22 @@
 import React, { useState } from 'react'
 import { useCrudRecoleccion } from '../hooks/useCrudRecoleccion'
 import { currencyFormatter, dateFormatter } from '../../utils/utilidades'
-import { ESTATUSRECOLECCION } from '../interfaces/IRecoleccionEntrega'
+import { ESTATUSRECOLECCION, IEntrega } from '../interfaces/IRecoleccionEntrega'
 import Recoleccion from '../recoleccion/Recoleccion'
 import { EmpleadosProvider } from '../../context/EmpleadosContext'
 import ModalRecoleccion from './ModalRecoleccion'
+interface props{
+  openModal: ()=>void
 
-const ListadoRecolecciones = () => {
+  }
+const ListadoRecolecciones = ({openModal}:props) => {
   const [id,setId]=useState(0);
   const { entregas,entrega, handleElimina,handleUpdate } = useCrudRecoleccion()
+  const updateRecolecicon=(entrega:IEntrega)=>{
+    openModal();
+    handleUpdate(entrega);
 
+  }
   return (
     <div>
       {entregas.length > 0 && (
@@ -66,8 +73,8 @@ const ListadoRecolecciones = () => {
                               <div className="col-sm-6">      
                                 <button className={`btn btn-warning ${m.estado === ESTATUSRECOLECCION.ENTREGADA && 'disabled'}  `}
                             
-                            onClick={() => handleUpdate(m)}
-                               data-bs-toggle="modal" data-bs-target="#modalRecoleccion"
+                            onClick={() => updateRecolecicon(m)}
+                           
                               >
                                 <i className="bi bi-card-list" style={{ fontSize: 8 }} ></i>         
                                 </button></div>
