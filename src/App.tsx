@@ -29,7 +29,9 @@ function App() {
           <div className='flex'>
             <Asid></Asid>        
             <CrudRecoleccionProvider>
-          <CrudClienteProvider><Content></Content></CrudClienteProvider>
+                 <CrudClienteProvider>
+                  <Content></Content>
+                  </CrudClienteProvider>
            
            
               </CrudRecoleccionProvider>

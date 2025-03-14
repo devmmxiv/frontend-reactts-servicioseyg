@@ -14,7 +14,12 @@ const Asid = () => {
            <i className="bi bi-journal-text me-2" aria-hidden="true"></i>Listado
             </NavLink>
             </li>
-         
+            <li id="11" className="mt-3 mb-3">
+            <NavLink to="/recoleccioneporcerrar" 
+            className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
+           <i className="bi bi-check2-circle me-2" aria-hidden="true"></i>Entregadas sin Cierre
+            </NavLink>
+            </li>
        <li id="2" className="mb-3">
               {/* <NavLink to="/recoleccion" 
             className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
@@ -25,18 +30,20 @@ const Asid = () => {
             className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
             <i className="bi bi-box-fill me-2 " aria-hidden="true"></i>Crear Recoleccion
             </NavLink>
+        
             </li>
             <li id="3" className="mb-3"  >
             <NavLink to="/cliente" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
             <i className="bi bi-person-add me-2 " aria-hidden="true"></i>Clientes
             </NavLink>
             </li>
+             {/*
             <li id="5" className="mb-3"  >
             <NavLink to="/empleado" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
             <i className="bi bi-person-add me-2 " aria-hidden="true"></i>Empleados
             </NavLink>
             </li>
-            
+            */}
             <li id="4" className="mb-3"  >
             <NavLink to="/proceso" className="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">
             <i className="bi bi-gear me-2" aria-hidden="true"></i>Procesos

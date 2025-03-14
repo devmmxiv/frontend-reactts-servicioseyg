@@ -26,11 +26,12 @@ const MunicipioProvider= ({children}:props)=>{
     const listaMunicipioss = async () => {
           
             const d = await getMunicipios();
-    
+     
             if(d !=null){
+              
                 setMunicipios(d)
      
-    
+                console.log("municipios"+d.length)
             }
     
         }

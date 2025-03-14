@@ -15,5 +15,7 @@ export interface ICliente{
 }
 export interface IClienteEnvia{
     id:number;
+    nombre?:string;
+    apellido?:string;
  
 }

@@ -248,8 +248,9 @@ console.log("recoleccion a actualizar",r)
       });
 
 
-      setRecolecciones(r)
+   
       actualizarRecoleccion(recoleccion.id, recoleccion);
+      setRecolecciones(r.filter(r=>r.estado!=ESTATUSRECOLECCION.ENTREGADA))
     }
 
   }
@@ -366,7 +367,7 @@ console.log("recoleccion a actualizar",r)
     }
     listarEmpleados();
 
-  }, [recolecciones])
+  }, [])
   return (
     <>
       <div className="container-fluid">

@@ -5,7 +5,7 @@ import { ICliente } from "../pages/interfaces/ICliente";
 import { clienteInit, entregaInit } from "../pages/interfaces/ObjectosdeInicio/InterfacesdeInicio";
 import { ETipoDireccion } from "../pages/interfaces/IDireccion";
 import { ESTATUSRECOLECCION, IEntrega, TIPOPAGO } from "../pages/interfaces/IRecoleccionEntrega";
-import { api_deleteRecoleccion, api_getRecoleccionByClient, api_recoleccion, api_recoleccionEntrega, api_updateEntrega, api_updateRecoleccion } from "../pages/api/api_recoleccion/api_recoleccionentrega";
+import { api_deleteRecoleccion, api_getRecoleccionByClient, api_getRecoleccioneToCierre, api_recoleccion, api_recoleccionEntrega, api_updateEntrega, api_updateRecoleccion } from "../pages/api/api_recoleccion/api_recoleccionentrega";
 import { IMunicipio } from "../pages/interfaces/iMunicipio";
 import { IEmpleado } from "../pages/interfaces/IEmpleado";
 export interface CrudRecoleccionContextProps {
@@ -14,13 +14,15 @@ export interface CrudRecoleccionContextProps {
     clientes: ICliente[],
 
     entregas: IEntrega[],
+    recoleccionesEntregadasNoCerradas:IEntrega[],
     handleSelect: (labe?: string, value?: number) => void,
     handleRecoleccion: (entrega: IEntrega) => void,
     handleElimina: (id: number) => void,
     handleInicia: () => void,
     handleLimpiarEntrega: () => void,
     handleUpdate: (entrega: IEntrega) => void
-
+    handleRecoleccionesEntregadasNoCerradas: () => void,
+    handleSetRecoleccionesEntregadas: (entregas: IEntrega[]) => void
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
@@ -31,6 +33,7 @@ const CrudRecoleccionContext = createContext<CrudRecoleccionContextProps>({} as 
 const CrudRecoleccionProvider = ({ children }: props) => {
     const [entrega, setEntrega] = useState<IEntrega>(entregaInit)
     const [entregas, setEntregas] = useState<IEntrega[]>([])
+    const [recoleccionesEntregadasNoCerradas, setRecoleccioneEntregadas] = useState<IEntrega[]>([]);//recoleccionesentregadas no cerradas
     const [clientes, setClientes] = useState<ICliente[]>([])
     const [envia, setEnvia] = useState<ICliente>(clienteInit)
 
@@ -62,7 +65,10 @@ const CrudRecoleccionProvider = ({ children }: props) => {
 
 
     }
+    const handleSetRecoleccionesEntregadas=(entregas:IEntrega[])=>{
 
+        setRecoleccioneEntregadas(recoleccionesEntregadasNoCerradas);
+    }
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         setEntrega({
@@ -189,16 +195,54 @@ const CrudRecoleccionProvider = ({ children }: props) => {
 
                     return d;
                 });
+                const rr = recoleccionesEntregadasNoCerradas.map((d) => {
+                    if (d.id === entrega.id && d.estado) {
+                        return {
+                            ...d,
+                            nombreRecibe: entrega.nombreRecibe,
+                            apellidoRecibe: entrega.apellidoRecibe,
+                            direccionEntrega: entrega.direccionEntrega,
+                            municipioRecibe: entrega.municipioRecibe,
+                            tipoPago: entrega.tipoPago,
+                            // precioProducto: recoleccion.precioProducto,
+                            totalCobrar: entrega.totalCobrar,
+                            precioEnvio: entrega.precioEnvio,
+                            // costoEnvio: recoleccion.costoEnvio
+                            zonaEntrega: entrega.zonaEntrega,
+
+                            estado: entrega.estado,
+                            empleadoAsignado: entrega.empleadoAsignado
+
+                        }
+                      
+                    }
+                 
+                    return d;
+                    
+                });
+                
+                setRecoleccioneEntregadas(rr.filter(r=>r.estado==ESTATUSRECOLECCION.ENTREGADA));
+                
                 setEntregas(r)
             }
         }
         setEntrega(entregaInit);
 
     }
+    const handleRecoleccionesEntregadasNoCerradas = async () => {
+
+
+        const data = await api_getRecoleccioneToCierre()
+        setRecoleccioneEntregadas(data.filter((r: { estado: ESTATUSRECOLECCION; })=>r.estado==ESTATUSRECOLECCION.ENTREGADA));
+       // setRecoleccioneEntregadas(recoleccionesEntregadasNoCerradas.filter(r=>r.estado ==ESTATUSRECOLECCION.ENTREGADA))
+       // console.log(recoleccionesEntregadasNoCerradas);
+
+    }
     const handleUpdate = (entrega: IEntrega) => {
-        console.log("entraga a actualizar",entrega)
+       
         setEntrega(entrega);
     }
+
     const handleElimina = async (id: number) => {
         const resp = await api_deleteRecoleccion(id)
         if (resp != null) {
@@ -241,11 +285,11 @@ const CrudRecoleccionProvider = ({ children }: props) => {
             setClientes(data)
         }
         listarCliente()
-
+       // handleRecoleccionesEntregadasNoCerradas();
 
     }, [])
 
-    const data = { clientes, entrega, entregas, envia, handleSelect, handleInicia, handleRecoleccion, handleElimina, handleUpdate, handleLimpiarEntrega, onChange, onSelect }
+    const data = { clientes, entrega, entregas, envia, recoleccionesEntregadasNoCerradas,handleSelect, handleInicia, handleRecoleccion, handleElimina, handleUpdate, handleLimpiarEntrega,handleRecoleccionesEntregadasNoCerradas,handleSetRecoleccionesEntregadas, onChange, onSelect }
     return (
         <CrudRecoleccionContext.Provider value={data}>{children}</CrudRecoleccionContext.Provider>
     )

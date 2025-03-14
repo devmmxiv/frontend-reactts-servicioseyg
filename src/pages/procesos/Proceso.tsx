@@ -21,7 +21,6 @@ const Proceso = () => {
   const getRecoleccionesToCierre = async () => {
     const data: IRecoleccion[] = await api_getRecoleccioneToCierre();
 
-    console.log('iniciar con get')
 
     const r = data.map((d) => {
 

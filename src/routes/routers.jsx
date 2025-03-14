@@ -9,6 +9,7 @@ import RecoleccionN from "../pages/recoleccion-new/Recoleccion";
 import { useLogin } from "../pages/hooks/useLogin";
 import Proceso from '../pages/procesos/Proceso'
 import Reporte from "../pages/reportes/reporte";
+import RecoleccionesEntregadas from "../pages/recolecciones-entregadas/RecoleccionesEntregadas";
 
 
 
@@ -30,6 +31,8 @@ const MisRutas = () => {
         <Route path="/home" exact={true} Component={Home}></Route>
         <Route path="/cliente" exact={true} Component={
           Cliente}></Route>
+            <Route path="/recoleccioneporcerrar" exact={true} Component={RecoleccionesEntregadas}></Route>
+          
         <Route path="/recoleccion" exact={true} Component={RecoleccionN}></Route>
 
         

@@ -5,8 +5,8 @@ import CrudRecoleccionContext from "../../context/CrudRecoleccionContext"
 
 
 export const useCrudRecoleccion =()=>{
-    const {clientes,entrega,entregas,envia,handleSelect,handleInicia,handleRecoleccion,handleElimina,handleUpdate,
-        handleLimpiarEntrega,
+    const {clientes,entrega,entregas,envia,recoleccionesEntregadasNoCerradas,handleSelect,handleInicia,handleRecoleccion,handleElimina,handleUpdate,
+        handleLimpiarEntrega, handleRecoleccionesEntregadasNoCerradas,handleSetRecoleccionesEntregadas,
         onChange,onSelect}=useContext(CrudRecoleccionContext)
 
     return{
@@ -14,12 +14,15 @@ export const useCrudRecoleccion =()=>{
         entrega,
         entregas,
         envia,
+        recoleccionesEntregadasNoCerradas,
         handleSelect,
         handleInicia,
         handleElimina,
         handleUpdate,
         handleRecoleccion,
         handleLimpiarEntrega,
+        handleRecoleccionesEntregadasNoCerradas,
+        handleSetRecoleccionesEntregadas,
         onChange,
         onSelect
   

@@ -7,11 +7,13 @@ import { EmpleadosProvider } from '../../context/EmpleadosContext'
 import ModalRecoleccion from './ModalRecoleccion'
 interface props{
   openModal: ()=>void
-
+  entregas:IEntrega[]
+  entregadas:boolean
   }
-const ListadoRecolecciones = ({openModal}:props) => {
+const ListadoRecolecciones = ({openModal,entregas,entregadas}:props) => {
   const [id,setId]=useState(0);
-  const { entregas,entrega, handleElimina,handleUpdate } = useCrudRecoleccion()
+ 
+  const { entrega, handleElimina,handleUpdate } = useCrudRecoleccion()
   const updateRecolecicon=(entrega:IEntrega)=>{
     openModal();
     handleUpdate(entrega);
@@ -33,6 +35,10 @@ const ListadoRecolecciones = ({openModal}:props) => {
                   <thead>
                     <tr>
                       <th scope="col">#</th>
+                      {entregadas&&(
+               <th scope="col">Cliente Envia</th>
+                      )}
+                 
                       <th scope="col">Persona Recibe</th>
                       <th scope="col">Direccion</th>
                       <th scope="col">Municipio</th>
@@ -52,7 +58,7 @@ const ListadoRecolecciones = ({openModal}:props) => {
                       return (
                         <tr key={m.id}>
                           <th scope="row">{i + 1}</th>
-
+                          {entregadas&&(        <td>{m.clienteEnvia.nombre + ' ' + m.clienteEnvia.apellido}</td>)}
                           <td>{m.nombreRecibe + ' ' + m.apellidoRecibe}</td>
                           <td>{m.direccionEntrega}</td>
                           <td>{m.municipioRecibe.nombre}</td>
@@ -71,7 +77,7 @@ const ListadoRecolecciones = ({openModal}:props) => {
 
                             <div className="row">
                               <div className="col-sm-6">      
-                                <button className={`btn btn-warning ${m.estado === ESTATUSRECOLECCION.ENTREGADA && 'disabled'}  `}
+                                <button className={`btn btn-warning`}
                             
                             onClick={() => updateRecolecicon(m)}
                            
