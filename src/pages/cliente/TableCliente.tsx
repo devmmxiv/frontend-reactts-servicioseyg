@@ -5,14 +5,15 @@ import { useCliente } from '../hooks/useCliente'
 import ConfirmDialogModal from '../shared/confirmDialog/ConfirmDialogModal'
 import { Modal } from 'react-bootstrap'
 interface props{
-    clientes:ICliente[]
+    //clientes:ICliente[]
+    editCliente: (clientes:ICliente) => void
 
 }
-const TableCliente = ({clientes}:props) => {
-    const {handleCliente,handlerEliminaCliente}=useCliente()
+const TableCliente = ({editCliente}:props) => {
+    const {selectedCliente,handlerEliminaCliente,clientes}=useCliente()
     const [id,setId]=useState(0);
     const [mensaje,setMensaje]=useState("")
-    const [show,setShow]=useState(false);
+  
     const eliminarCliente=(id:number)=>{
      const buttonElement = document.activeElement as HTMLElement; 
       buttonElement.blur();
@@ -20,14 +21,13 @@ const TableCliente = ({clientes}:props) => {
       setMensaje("Seguro desea Eliminar el Cliente");
       setId(id)
     }
-    const cerrarModal=()=>{
-      setShow(false);
-    }
+
     const handlerConfirmacion=()=>{
       
       handlerEliminaCliente(id);
       setId(0);
     }
+ 
   return (
     <div>
            <table className="table  table-striped table-hover caption-top">
@@ -100,9 +100,8 @@ const TableCliente = ({clientes}:props) => {
                             <button
                               className="btn btn-warning"
                               style={{ marginRight: 5 }}
-
-                              data-bs-toggle="modal" data-bs-target="#clienteModal"
-                              onClick={(e) => handleCliente(m)}
+                             /* data-bs-toggle="modal" data-bs-target="#clienteModal" */ 
+                              onClick={(e) => editCliente(m)}
 
                             >
                               <i className="bi bi-pencil-square"></i>

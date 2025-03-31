@@ -13,7 +13,7 @@ import { api_getClientes } from '../api/api_cliente/apiclientes';
 import FechaPicker from '../shared/datePicker/FechaPicker';
 import { dateToString } from '../../utils/utilidades';
 import { IEmpleado } from '../interfaces/IEmpleado';
-import { api_getEmpleados } from '../api/api_empleado/apiempleado';
+import { api_getEmpleados, api_getEmpleadosPorCierre } from '../api/api_empleado/apiempleado';
 
 
 
@@ -125,7 +125,8 @@ const Reporte = () => {
     } else {
       setDisable(false)
       setIdCierre(value)
-      listarCliente(value)
+      listarCliente(value);
+      listarEmpleadoCierre(value);
     }
   }
   const handleSelectCliente = (label?: string, value?: number) => {
@@ -147,7 +148,7 @@ const Reporte = () => {
     }
   }
   const handleSelectClienteMes = (label?: string, value?: number) => {
-    console.log(`valor id cliente ${value}`)
+    //console.log(`valor id cliente ${value}`)
     if (value === undefined) {
       setIdClientMes(0)
 
@@ -181,6 +182,13 @@ const Reporte = () => {
     setClientes(data)
 
   }
+  const listarEmpleadoCierre = async (id: number) => {
+    console.log(id);
+    const data: IEmpleado[] = await api_getEmpleadosPorCierre(id);
+
+    setEmpleados(data)
+
+  }
   const listarEmpleados=async ()=>{
     const data = await api_getEmpleados();
     setEmpleados(data);
@@ -192,7 +200,7 @@ const Reporte = () => {
   useEffect(() => {
     listarTodoslosCliente();
     listCierres();
-    listarEmpleados();
+    //listarEmpleados();
     setShow(false)
   }, [])
   return (

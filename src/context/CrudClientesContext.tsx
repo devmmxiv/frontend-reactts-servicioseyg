@@ -2,12 +2,16 @@ import { createContext, useEffect, useState } from "react"
 import { ICliente } from "../pages/interfaces/ICliente"
 import { clienteInit } from "../pages/interfaces/ObjectosdeInicio/InterfacesdeInicio"
 import { api_createCliente, api_deleteCliente, api_getClientes, api_updateCliente } from "../pages/api/api_cliente/apiclientes"
+import Cuenta from "../pages/cliente/cuenta_bancaria/Cuenta"
 
 export interface CrudClienteContextProps {
     cliente: ICliente,
     clientes: ICliente[],
     handleCliente: (cliente: ICliente) => void
     handlerEliminaCliente: (id: number) => void
+    selectedCliente:(cliente:ICliente)=>void
+    actualizarClientes:(clientes:ICliente[])=>void
+    listarClientes:()=>void
     //  handleSelect: (labe?: string, value?: number) => void,
 
     /*handleElimina: (id: number) => void,
@@ -36,7 +40,7 @@ const CrudClienteProvider = ({ children }: props) => {
     }
     const handleCliente = async (cliente: ICliente) => {
 
-
+      
         if (cliente.id < 1) {
 
             //insertar
@@ -46,18 +50,22 @@ const CrudClienteProvider = ({ children }: props) => {
                 return true;
             }
         } else {
-
+     
             const respuesta = await api_updateCliente(cliente.id, cliente);
-            if (respuesta?.status == 200) {
-
+            
+            if (respuesta) {
+              
                 const r = clientes.map((d) => {
                     if (d.id === cliente.id) {
                         return {
                             ...d,
                             nombre: cliente.nombre,
                             apellido: cliente.apellido,
-                            telefono: cliente.telefono
-
+                            telefono: cliente.telefono,
+                            nombrePagina:cliente.nombrePagina,
+                            cuentas:cliente.cuentas,
+                            direcciones:cliente.direcciones
+                            
                         }
 
                     }
@@ -67,7 +75,7 @@ const CrudClienteProvider = ({ children }: props) => {
                 setClientes(r)
             }
         }
-        setCliente(clienteInit);
+       // setCliente(clienteInit);
 
     }
     const handlerEliminaCliente = async (id: number) => {
@@ -87,13 +95,25 @@ const CrudClienteProvider = ({ children }: props) => {
         }
 
     }
+    const selectedCliente=async (cliente:ICliente)=>{
+       
+        setCliente(cliente);
+    }
+    const actualizarClientes=(clientes:ICliente[])=>{
+        setClientes(clientes)
+    }
+    const listarClientes=()=>{
+
+        getClientes();
+    }
     useEffect(() => {
+
 
         getClientes();
 
 
     }, [])
-    const data = { clientes, cliente, handleCliente, handlerEliminaCliente }
+    const data = { clientes, cliente,actualizarClientes, handleCliente, handlerEliminaCliente,selectedCliente ,listarClientes}
     return (
         <CrudClienteContext.Provider value={data}>{children}</CrudClienteContext.Provider>
     )

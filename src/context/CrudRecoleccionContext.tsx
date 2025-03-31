@@ -281,7 +281,7 @@ const CrudRecoleccionProvider = ({ children }: props) => {
 
         const listarCliente = async () => {
             const data = await api_getClientes()
-            console.log("listado de lcientes",data);
+           // console.log("listado de lcientes",data);
             setClientes(data)
         }
         listarCliente()

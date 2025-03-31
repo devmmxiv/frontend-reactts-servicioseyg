@@ -8,6 +8,8 @@ import MainCuentas from './cuenta_bancaria/MainCuentas'
 import { ICuentaBancaria } from '../interfaces/ICuentaBancaria'
 import MainDirecciones from './direccion/MainDirecciones'
 import Alert from '../shared/Alert'
+import { useCliente } from '../hooks/useCliente'
+import { Modal } from 'react-bootstrap'
 
 
 
@@ -15,48 +17,162 @@ interface props {
 
     cliente: ICliente,
     update: Boolean,
+    hideModal: () => void
+    show: boolean
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     ManejadorCuenta: (cuenta: ICuentaBancaria, accion: number) => void
     ManejadorDirecciones: (direccion: IDireccion, accion: number) => void
     onSaveChanges: () => void
 }
 
-const ModalCliente: FC<props> = ({ cliente, update, onChange, ManejadorDirecciones, ManejadorCuenta, onSaveChanges}: props): JSX.Element => {
+const ModalCliente: FC<props> = ({ show, hideModal, cliente, update, onChange, ManejadorDirecciones, ManejadorCuenta, onSaveChanges }: props): JSX.Element => {
     const [showAlert, setShowAlert] = useState(false)
     const [mensajeAlerta, setMensajeAlerta] = useState('')
-
+    const {  handlerEliminaCliente, handleCliente } = useCliente()
     const toogleAlerta = () => {
         setShowAlert(false);
     }
 
-    
+
     /**funciones */
     const onSave = () => {
-        if(cliente.nombre.trim()==='' || cliente.apellido.trim()==='' || cliente.telefono.trim()===''){
+        if (cliente.nombre.trim() === '' || cliente.apellido.trim() === '' || cliente.telefono.trim() === '') {
             setMensajeAlerta('No puede dejar campos vacios, por favor revise')
             setShowAlert(true);
             return
         }
-        if(cliente.direcciones.length==0){
+        if (cliente.direcciones.length == 0) {
             setMensajeAlerta('Debe ingresar al menos una direccion')
             setShowAlert(true);
-            return 
+            return
         }
-        if(cliente.cuentas.length==0){
+        if (cliente.cuentas.length == 0) {
             setMensajeAlerta('Debe ingresar al menos una cuenta Bancaria')
             setShowAlert(true);
-            return 
+            return
         }
-        onSaveChanges()
-
+        handleCliente(cliente);
+        hideModal();
+        
     }
-
+    const CerrarModal=()=>{
+        console.log("cerrar")
+        hideModal();
+        setShowAlert(false);
+    }
     return (
         <>
+            <Modal show={show} onHide={hideModal} size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        {cliente.id < 1 ? (
+                            <p className="text-center h4 mt-2">Ingreso datos de Cliente Nuevo </p>
+                        ) : (<p className="text-center h4 mt-2">Modificacion de datos de entrega del cliente <strong>{cliente.nombre} {cliente.apellido}</strong></p>)}
 
+
+
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Alert show={showAlert} toogle={toogleAlerta} mensaje={mensajeAlerta} clase={"alert alert-danger alert-dismissible fade show"}></Alert>
+                    <div>
+
+                        <ul className="nav nav-tabs" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link active" id="datospersonales" data-bs-toggle="tab" href="#datospersonales_tab" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Datos Personales</a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link" id="direccion" data-bs-toggle="tab" href="#direccion_tab" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Direccion</a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link" id="datosbancarios" data-bs-toggle="tab" href="#datosbancarios_tab" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Cuenta Bancaria</a>
+                            </li>
+                        </ul>
+                        <div className="tab-content pt-5" id="tab-content">
+
+                            <div className="tab-pane active" id="datospersonales_tab" role="tabpanel" aria-labelledby="simple-tab-0">
+                                <div className="card">
+                                    <div className="card-header">
+
+                                        Datos Personales del Cliente
+                                        {update && (<> Codigo cliente {cliente.codigoCliente}</>)}
+
+                                    </div>
+                                   
+
+                                    <div className="card-body">
+
+                                        <div className="input-group mb-3">
+                                            <span className="input-group-text">Nombre</span>
+                                            <input type="text" id="firstname" aria-label="First name"
+                                                value={cliente.nombre}
+                                                name='nombre'
+                                                className="form-control"
+                                                onChange={(e) => onChange(e)}
+                                            />
+
+
+                                        </div>
+
+                                        <div className="input-group mb-3">
+                                            <span className="input-group-text">Apellido</span>
+                                            <input type="text" aria-label="Last name"
+                                                value={cliente.apellido}
+                                                onChange={(e) => onChange(e)}
+                                                name='apellido' className="form-control" />
+
+                                        </div>
+                                        <div className="input-group mb-3">
+                                            <span className="input-group-text">Telefono</span>
+                                            <input type="text" aria-label="phone"
+                                                value={cliente.telefono}
+                                                onChange={(e) => onChange(e)}
+                                                name='telefono' className="form-control" />
+
+                                        </div>
+                                        <div className="input-group mb-3">
+                                            <span className="input-group-text ">Pagina Web</span>
+                                            <input type="text" aria-label="pagina"
+                                                value={cliente.nombrePagina}
+                                                onChange={(e) => onChange(e)}
+                                                name='nombrePagina' className="form-control" />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div className="tab-pane" id="direccion_tab" role="tabpanel" aria-labelledby="simple-tab-1">
+                                <div className="card">
+                                    <MainDirecciones direcciones={cliente.direcciones} ManejadorDirecciones={ManejadorDirecciones}
+                                    > </MainDirecciones>
+
+                                </div>
+                            </div>
+                            <div className="tab-pane" id="datosbancarios_tab" role="tabpanel" aria-labelledby="simple-tab-2">
+                                <div className="card">
+                                    <MainCuentas cuentas={cliente.cuentas} ManejadorCuenta={ManejadorCuenta}></MainCuentas>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button type="button" id='btnCerrarModalCliente' className="btn btn-secondary"
+                        
+                        onClick={ ()=>CerrarModal()}>Cerrar</button>
+                    <button type="button" className="btn btn-primary"
+
+                        onClick={onSave}>{cliente.id === 0 ? 'Grabar' : 'Grabar Cambios'}</button>
+                </Modal.Footer>
+            </Modal>
             <div>
 
-                {/* Modal */}
+                {/* Modal 
                 
                 <div className= "modal fade"  id="clienteModal"  tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true" >
                     <div className="modal-dialog modal-xl">
@@ -170,7 +286,7 @@ const ModalCliente: FC<props> = ({ cliente, update, onChange, ManejadorDireccion
                         </div>
                     </div>
                 </div>
-
+*/}
             </div>
             <div>
 

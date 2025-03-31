@@ -41,3 +41,24 @@ export const api_getEmpleadosTecnicos = async () => {
         console.log("Erron en fetch", error)
     }
 };
+export const api_getEmpleadosPorCierre = async (id:number) => {
+    try {
+     
+        const resp = await fetch(`${API}/empleado/empleadosporcierre/${id}`);
+     
+        if (resp.ok) {
+     
+            const data = await resp.json().catch((error) => {
+                console.log("error en fetch data", error);
+            });
+            //console.log(data)
+            return data;
+        } else {
+            return resp;
+        }
+
+
+    } catch (error) {
+        console.log("Erron en fetch", error)
+    }
+};

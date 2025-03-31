@@ -32,28 +32,29 @@ const initCliente: ICliente = {
 
 
 const Cliente = () => {
- 
-  const [listaClientes, setListaClientes] = useState<ICliente[]>([])
+     const {selectedCliente,actualizarClientes,listarClientes,cliente,clientes}=useCliente()
+     const [show,setShow]=useState(false);
+  //const [listaClientes, setListaClientes] = useState<ICliente[]>([])
   const [temporalClientes, setTemporalClientes] = useState<ICliente[]>([])
-  const [cliente, setCliente] = useState<ICliente>(initCliente)
+  //const [cliente, setCliente] = useState<ICliente>(initCliente)
   const [update, setUpdate] = useState(false)
   const [busqueda, setBusqueda] = useState("");
 
 
   const { userLogin } = useLogin()
-  const {clientes }=useCliente();
+  const { }=useCliente();
 
 
 
   const onClickeAgregar = (c: ICliente, opcion: boolean) => {
 
     if (opcion) {
-      setCliente(c)
+      selectedCliente(c)
     } else {
-      setCliente(initCliente)
+      selectedCliente(initCliente)
     }
     setUpdate(opcion);
-
+    setShow(true);
   }
 
 
@@ -66,12 +67,12 @@ const Cliente = () => {
       const b = cliente.apellido.split(" ");
       const apellido = b[0];
       const username = a + apellido;
-      setCliente({ ...cliente, })
+      selectedCliente({ ...cliente, })
       const respuser = await api_newUser(userLogin.token, username.toLowerCase())
       if (respuser?.status) {
         const resp = await api_createCliente(cliente);
         f.alerta('Cliente Creado con Exito')
-        setCliente(initCliente)
+        selectedCliente(initCliente)
       } else {
         f.alerta('No se pudo crear el cliente')
       }
@@ -80,7 +81,7 @@ const Cliente = () => {
 
       const resp = await api_updateCliente(cliente.id, cliente);
       f.alerta('Cliente Actualizado con Exito')
-      setCliente(initCliente)
+      selectedCliente(initCliente)
     }
 
     listarClientes();
@@ -88,7 +89,7 @@ const Cliente = () => {
   }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    setCliente({
+    selectedCliente({
       ...cliente,
       [e.target.name]: e.target.value
     });
@@ -104,13 +105,13 @@ const Cliente = () => {
     if (accion === 1) {
       if (cuenta.id === 0) {//es cuenta nueva la agrego al arreglo de cuentas
         const nCuentas = [...cliente.cuentas, cuenta]
-        setCliente({
+        selectedCliente({
           ...cliente,
           cuentas: nCuentas
         })
       } else {
         const nCuentas = actualizarCuentas(cuenta);
-        setCliente({
+        selectedCliente({
           ...cliente,
           cuentas: nCuentas
         })
@@ -123,7 +124,7 @@ const Cliente = () => {
         //llamar al api para eliminar en base de datos
       }
       const nCuentas = cliente.cuentas.filter(x => x.numeroCuenta != cuenta.numeroCuenta)
-      setCliente({
+      selectedCliente({
         ...cliente,
         cuentas: nCuentas
       })
@@ -165,13 +166,13 @@ const Cliente = () => {
         //}
         const nDirecciones = [...cliente.direcciones, direccion]
 
-        setCliente({
+        selectedCliente({
           ...cliente,
           direcciones: nDirecciones
         })
       } else {
         const nDirecciones = actualizarDirecciones(direccion);
-        setCliente({
+        selectedCliente({
           ...cliente,
           direcciones: nDirecciones
         })
@@ -184,7 +185,7 @@ const Cliente = () => {
         //llamar al api para eliminar en base de datos
       }
       const nDirecciones = cliente.direcciones.filter(x => x.id != direccion.id)
-      setCliente({
+      selectedCliente({
         ...cliente,
         direcciones: nDirecciones
       })
@@ -209,19 +210,13 @@ const Cliente = () => {
     return cuentas
   }
   /****************************************/
-  const listarClientes = async () => {
- 
-    setListaClientes(clientes);
-   // setTemporalClientes(clientes)
   
-  }
   const filtro = () => {
 
     const filtroClientes = temporalClientes.filter(
       c => {
         return (
-          c
-            .nombre
+          c.nombre
             .toLowerCase()
             .includes(busqueda.toLowerCase()) ||
           c
@@ -233,18 +228,32 @@ const Cliente = () => {
     );
 
     if (busqueda.length == 0) {
-      setListaClientes(clientes);
+      
+      actualizarClientes(temporalClientes);
     } else {
-
-      setListaClientes(filtroClientes);
+      actualizarClientes(filtroClientes);
+     // setListaClientes(filtroClientes);
     }
 
   }
+  const cerrarModal=()=>{
+
+    setShow(false);
+  }
+  const editCliente=(cliente:ICliente)=>{
+    selectedCliente(cliente)
+    setShow(true);
+  }
   useEffect(() => {
+ 
+     listarClientes();
 
-    listarClientes()
+      setTemporalClientes(clientes)
 
-  }, [clientes])
+
+    //listarClientes()
+
+  }, [])
 
 
 
@@ -264,7 +273,7 @@ const Cliente = () => {
                       name="btnAgregar"
                       onClick={(e) => onClickeAgregar(initCliente, false)}
                       className="btn btn-success"
-                      data-bs-toggle="modal" data-bs-target="#clienteModal"
+                      //data-bs-toggle="modal" data-bs-target="#clienteModal"
 
 
                     >
@@ -312,7 +321,7 @@ const Cliente = () => {
                 </div>
                 
             
-              <TableCliente clientes={listaClientes}></TableCliente>
+              <TableCliente editCliente={editCliente}></TableCliente>
           
                 
                 {/**  <table className="table  table-striped table-hover caption-top">
@@ -416,7 +425,8 @@ const Cliente = () => {
 
 
       <ModalCliente
-
+        show={show}
+        hideModal={cerrarModal}
         cliente={cliente} update={update} onChange={onChange}
         ManejadorCuenta={ManejadorCuentas}
         ManejadorDirecciones={ManejadorDirecciones}

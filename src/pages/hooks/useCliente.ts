@@ -2,8 +2,8 @@ import { useContext } from "react"
 import CrudClienteContext from "../../context/CrudClientesContext"
 
 export const useCliente=()=>{
-    const {clientes,handleCliente,handlerEliminaCliente}=useContext(CrudClienteContext)
+    const {cliente,clientes,handleCliente,handlerEliminaCliente,selectedCliente,actualizarClientes,listarClientes}=useContext(CrudClienteContext)
     return{
-        clientes,handleCliente,handlerEliminaCliente
+      cliente,  clientes,handleCliente,handlerEliminaCliente,selectedCliente,actualizarClientes,listarClientes
     }
 }

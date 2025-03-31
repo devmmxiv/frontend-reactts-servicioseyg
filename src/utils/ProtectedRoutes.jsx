@@ -3,7 +3,7 @@ import {Navigate,Outlet} from 'react-router-dom'
 const ProtectedRoutes = ({
     canActivate,redirecPath='/login'
 }) => {
-    console.log('protectesdroutes')
+    //console.log('protectesdroutes')
     if(!canActivate){
 
         return <Navigate to={redirecPath}></Navigate>

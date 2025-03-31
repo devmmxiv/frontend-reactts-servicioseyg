@@ -31,7 +31,7 @@ const MunicipioProvider= ({children}:props)=>{
               
                 setMunicipios(d)
      
-                console.log("municipios"+d.length)
+                //console.log("municipios"+d.length)
             }
     
         }

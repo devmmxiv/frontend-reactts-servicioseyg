@@ -77,11 +77,9 @@ const PerfilProvider= ({children}:props)=>{
                     if(data.direcciones.lenght>0){
                         setDirecciones(data.direcciones);
                         const dp=direcciones.find(x=>x.tipoDireccion=='PRINCIPAL')
-                        console.log('direccion principal',dp)
+                        //console.log('direccion principal',dp)
                         setPerfil({...perfil,direccion:dp!})
-                        
-                    }else{
-                        console.log('no hay direcciones')
+                
 
                     }
 
@@ -102,7 +100,7 @@ const PerfilProvider= ({children}:props)=>{
                   });
             
                 try{ 
-                    console.log('dataperfilcliente',data);
+                 //   console.log('dataperfilcliente',data);
                     setPerfil({...perfil,id:data.id,
                         usuario:userLogin.username,
                         codigo:data.codigoCliente,

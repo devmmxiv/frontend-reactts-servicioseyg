@@ -70,7 +70,7 @@ const ModalRecoleccion1 = ({ show, hideModal }: props) => {
         <>
 
             <div className="container mt-4">
-                <div className="row">
+             
 
 
 
@@ -266,7 +266,7 @@ const ModalRecoleccion1 = ({ show, hideModal }: props) => {
 
 
 
-            </div>
+       
 
 
         </>

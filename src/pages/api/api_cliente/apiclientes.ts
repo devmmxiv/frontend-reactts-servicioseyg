@@ -17,7 +17,7 @@ export const api_createCliente = async (client:ICliente) => {
         client
         ),
       });
-      console.log(resp);
+      //console.log(resp);
       const data = await resp.json().catch((error) => {
         console.log("error en fetch data", error);
       });
@@ -29,7 +29,7 @@ export const api_createCliente = async (client:ICliente) => {
   };
   export const api_updateCliente = async (id: number, client: ICliente) => {
     try{
-       
+       console.log('update cliente',client)
         const resp = await fetch(`${API}/cliente`, {
         method: "PUT",
         mode: "cors",
@@ -41,14 +41,21 @@ export const api_createCliente = async (client:ICliente) => {
         client
         ),
       });
-     
-      const data = await resp.json().catch((error) => {
-        console.log("error en fetch data", error);
-      });
-      return data;
+    
+      
+      if(resp.status==200){
+        return true;
+
+      }else{
+        return false;
+      }
+
+
+  
     
     }catch(error){
         console.log("Erron en fetch",error)
+        return false;
     }
   };
   export const api_getClientes = async () => {
