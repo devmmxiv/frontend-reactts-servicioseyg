@@ -67,6 +67,11 @@ const Home = () => {
   const [count,setCount]=useState(0)
   const [take,setTake]=useState(100)
   const [busqueda,setBusqueda]=useState("");
+  const [show,setShow]=useState(false);
+
+  const hideModal=()=>{
+    setShow(false);
+  }
   const obtenerRecolecciones = async (take:number,page:number=1) => {
     const resultado = await api_getRecoleccionPagination(take,page)
 
@@ -114,8 +119,9 @@ const Home = () => {
     setId(id)
   }
   const handlerEditButton = (r: IRecoleccion) => {
-console.log("recoleccion a actualizar",r)
+
     setRecoleccion(r)
+    setShow(true)
   }
 
   const handlerConfirmacion = () => {
@@ -340,11 +346,11 @@ console.log("recoleccion a actualizar",r)
     const filtroRecolecciones = temporalRecolecciones.filter(
       c => {
         return (
-          c.empleadoAsignado.nombre!
+          c.empleadoAsignado!.nombre!
             .toLowerCase()
             .includes(busqueda.toLowerCase()) ||
           c
-            .empleadoAsignado.apellido!
+            .empleadoAsignado!.apellido!
             .toLowerCase()
             .includes(busqueda.toLowerCase())
         );
@@ -447,15 +453,14 @@ console.log("recoleccion a actualizar",r)
                   </td>
 
                   <td >{m.estado}</td>
-                  <td>{m.empleadoAsignado.nombre + ' ' + m.empleadoAsignado.apellido}</td>
+                  <td>{m.empleadoAsignado==null?'Mensajero No Asignado':(m.empleadoAsignado.nombre +' '+  m.empleadoAsignado.apellido)}</td>
 
                   <td>
                     <div className="row">
                       <div className="col-6"> <div className='mb-1'>       <button className={`btn btn-warning ${m.estado === ESTATUSRECOLECCION.ENTREGADA && 'enable'}  `}
                       onClick={() => handlerEditButton(m)}
                 
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalUpdateRecoleccion"
+                   
                     >
                       <i className="bi bi-card-list " style={{fontSize:8}}></i>
                     </button></div></div>
@@ -499,6 +504,8 @@ console.log("recoleccion a actualizar",r)
       </div>
       <ConfirmDialog mensaje={mensajeConfirmacion} handlerConfirmacion={handlerConfirmacion} idModal={idModal}></ConfirmDialog>
       <DetalleRecoleccion
+        hideModal={hideModal}
+        show={show}
         disableInputoCostoPRoducto={disableInputoCostoPRoducto}
         recoleccion={recoleccion}
         onChange={onChange}

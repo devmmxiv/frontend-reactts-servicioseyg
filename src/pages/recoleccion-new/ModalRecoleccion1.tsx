@@ -78,8 +78,8 @@ const ModalRecoleccion1 = ({ show, hideModal }: props) => {
                         <Modal.Header closeButton>
                             <Modal.Title>
                                 {recoleccion.id < 1 ? (
-                                    <p className="text-center h4 mt-2">Ingreso datos de Entrega para los envios de <strong>{envia.nombre} {envia.apellido}</strong></p>
-                                ) : (<p className="text-center h4 mt-2">Modificacion de datos de entrega del cliente <strong>{envia.nombre} {envia.apellido}</strong></p>)}
+                                    <p className="text-center h4 mt-2">Ingreso datos de Entrega para los envios de <strong>{recoleccion.clienteEnvia.nombre} {recoleccion.clienteEnvia.apellido}</strong></p>
+                                ) : (<p className="text-center h4 mt-2">Modificacion de datos de entrega del cliente <strong>{recoleccion.clienteEnvia.nombre} {recoleccion.clienteEnvia.apellido}</strong></p>)}
 
 
 

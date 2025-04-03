@@ -47,7 +47,7 @@ export interface IRecoleccion {
    // clienteRecibePagaEnvio?:boolean;
    empleadoRecolecta?:IEmpleado;
    empleadoEntrega?:IEmpleado;
-   empleadoAsignado:IEmpleado;
+   empleadoAsignado?:IEmpleado;
     fechaRecoleccion?:Date;
     fechaEntrega?:Date;
 }

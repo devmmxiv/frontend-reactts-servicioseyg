@@ -71,7 +71,7 @@ const ListadoRecolecciones = ({openModal,entregas,entregadas}:props) => {
                           </td>
 
                           <td>{m.estado}</td>
-                          <td>{m.empleadoAsignado.nombre + ' ' + m.empleadoAsignado.apellido}</td>
+                          <td>{m.empleadoAsignado==null?"Mensajero no Asignado": m.empleadoAsignado.nombre+ '' +m.empleadoAsignado.apellido}</td>
 
                           <td>
 

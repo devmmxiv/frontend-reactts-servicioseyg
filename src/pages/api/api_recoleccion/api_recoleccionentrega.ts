@@ -137,7 +137,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
   };
   export const api_updateRecoleccion = async (id: number, recoleccion: IRecoleccion) => {
     try{
-
+      console.log("-->",recoleccion);
         const resp = await fetch(`${API}/recoleccion-entrega/update/${recoleccion.id}`, {
         method: "PUT",
         mode: "cors",
@@ -166,7 +166,7 @@ export const api_recoleccion = async (recoleccion:IRecoleccionEntrega) => {
 
   export const api_updateEntrega = async (id: number, entrega: IEntrega) => {
     try{
-
+      console.log(entrega);
         const resp = await fetch(`${API}/recoleccion-entrega/update/${entrega.id}`, {
         method: "PUT",
         mode: "cors",
