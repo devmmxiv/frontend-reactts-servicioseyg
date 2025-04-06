@@ -66,7 +66,7 @@ export interface IActualizarEstadoRecoleccion {
 export enum ESTATUSRECOLECCION {
     CREADA = 'CREADA',
     RECOLECTADA = 'RECOLECTADA',
-    ENRUTA = 'EN RUTA',
+    ENRUTA = 'EN_RUTA',
     ENTREGADA = 'ENTREGADA',
     NORECIBIDA = 'NO_RECIBIDA'
 
